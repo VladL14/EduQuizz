@@ -34,7 +34,7 @@ public class ClassEnrollment {
     public User getStudent() {
         return student;
     }
-    public void setStudent(User student) {
-        this.student = student;
+    public void setStudent(User student2) {
+        this.student = student2;
     }
 }

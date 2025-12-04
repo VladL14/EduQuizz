@@ -1,80 +1,45 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
+# ----------------------------------------------------------------------
+# Build Output (Frontend & Backend)
+# ----------------------------------------------------------------------
 /dist
 /tmp
 /out-tsc
 /bazel-out
+target/
+build/
 
-# Node
-/node_modules
-/frontend/node_modules
-/.angular
-/frontend/.angular
-.angular/cache
+# ----------------------------------------------------------------------
+# Node & Frontend (Angular)
+# ----------------------------------------------------------------------
+# Aceasta linie ignora node_modules oriunde in proiect (si in root, si in frontend)
+node_modules/
+# La fel si pentru cache-ul de angular
+.angular/
+
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# ----------------------------------------------------------------------
+# IDEs & System Files
+# ----------------------------------------------------------------------
 .idea/
 .project
 .classpath
-.c9/
-*.launch
 .settings/
-*.sublime-workspace
-
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-__screenshots__/
-
-# System files
-.DS_Store
-Thumbs.db
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
+.vscode/
 *.iws
 *.iml
 *.ipr
+.DS_Store
+Thumbs.db
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
+# ----------------------------------------------------------------------
+# Logs & Java Compiled
+# ----------------------------------------------------------------------
+*.class
+*.log
+*.jar
+*.war
+*.ear
+.mvn/
+.gradle/

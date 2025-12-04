@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+
+# IDEs (global level only)
+.idea/
+.vscode/

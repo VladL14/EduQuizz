@@ -47,5 +47,5 @@ public class ClassEnrollmentService {
     public List<ClassEnrollment> getStudentEnrollments(Long studentId)
     {
         return classEnrollmentRepository.findByStudentId(studentId);
-    }
+    } 
 }

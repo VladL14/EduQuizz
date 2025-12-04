@@ -8,6 +8,10 @@
 
 # Node
 /node_modules
+/frontend/node_modules
+/.angular
+/frontend/.angular
+.angular/cache
 npm-debug.log
 yarn-error.log
 

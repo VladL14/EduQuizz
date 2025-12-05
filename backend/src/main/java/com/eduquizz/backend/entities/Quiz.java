@@ -1,5 +1,6 @@
 package com.eduquizz.backend.entities;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.*;
@@ -17,8 +18,13 @@ public class Quiz
     private Classroom classroom;
     
     private String title;
-    private Date activeFrom;
-    private Date activeUntil;
+
+    @Column(name = "active_from")
+    private LocalDateTime activeFrom;
+    
+    @Column(name = "actitve_until")
+    private LocalDateTime activeUntil;
+
     private Integer timeLimit;
 
     // Getters and Setters
@@ -40,16 +46,16 @@ public class Quiz
     public void setTitle(String title) {
         this.title = title;
     }
-    public Date getActiveFrom() {
+    public LocalDateTime getActiveFrom() {
         return activeFrom;
     }
-    public void setActiveFrom(Date activeFrom) {
+    public void setActiveFrom(LocalDateTime activeFrom) {
         this.activeFrom = activeFrom;
     }
-    public Date getActiveUnitl() {
+    public LocalDateTime getActiveUnitl() {
         return activeUntil;
     }
-    public void setActiveUnitl(Date activeUnitl) {
+    public void setActiveUnitl(LocalDateTime activeUnitl) {
         this.activeUntil = activeUnitl;
     }
     public Integer getTimeLimit() {

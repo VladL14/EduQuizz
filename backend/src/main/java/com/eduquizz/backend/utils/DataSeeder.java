@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -19,6 +20,9 @@ public class DataSeeder implements CommandLineRunner {
     
     @Autowired
     private ClassroomRepository classroomRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -60,6 +64,15 @@ public class DataSeeder implements CommandLineRunner {
             clasaJava.setTeacher(prof);
             
             classroomRepository.save(clasaJava);
+            
+            Quiz quiz = new Quiz();
+            quiz.setTitle("Test Java");
+            quiz.setActiveFrom(LocalDateTime.now().withHour(14).withMinute(0));
+            quiz.setActiveUnitl(LocalDateTime.now().plusDays(2).withHour(16).withMinute(0));
+            quiz.setTimeLimit(60);
+            quiz.setClassroom(clasaJava);
+
+            quizRepository.save(quiz);
 
             System.out.println("Baza de date a fost populata cu succes!");
         }

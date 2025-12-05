@@ -1,5 +1,6 @@
 package com.eduquizz.backend.servicies;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +46,27 @@ public class ClassEnrollmentService {
         return classEnrollmentRepository.save(classEnrollment);
     }
 
-    public List<ClassEnrollment> getStudentEnrollments(Long studentId)
+    public List<Classroom> getClassroomsByStudentId(Long studentId)
     {
-        return classEnrollmentRepository.findByStudentId(studentId);
-    } 
+        Optional<User> userOpt = userRepository.findById(studentId);
+        if(userOpt.isEmpty())
+        {
+            throw new RuntimeException("User not found with id: " + studentId);
+        }
+
+        if(userOpt.get().getRole() != RequestRole.STUDENT)
+        {
+            throw new RuntimeException("User with id: " + studentId + " is not a STUDENT");
+        }
+
+        List<ClassEnrollment> classEnrollments = classEnrollmentRepository.findAllByStudentId(studentId);
+        List<Classroom> classrooms = new ArrayList<>();
+        for(ClassEnrollment classEnrollment : classEnrollments)
+        {
+            Classroom classroom = classEnrollment.getClassroom();
+            classrooms.add(classroom);
+        }
+
+        return classrooms;
+    }
 }

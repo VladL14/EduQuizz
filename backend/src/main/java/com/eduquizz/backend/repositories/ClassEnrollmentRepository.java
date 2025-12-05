@@ -9,5 +9,5 @@ import com.eduquizz.backend.entities.ClassEnrollment;
 public interface ClassEnrollmentRepository extends JpaRepository<ClassEnrollment, Long>{
     boolean existsByStudentIdAndClassroomId(Long studentId, Long classroomId);
 
-    List<ClassEnrollment> findByStudentId(Long studentId);
+    List<ClassEnrollment> findAllByStudentId(Long studentId);
 }

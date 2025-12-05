@@ -30,6 +30,7 @@ export class Login {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         alert("Autentificare reusita!");
+        localStorage.setItem('currentUser', JSON.stringify(response));
         if (response.role === 'TEACHER') {
           this.router.navigate(['/admin']);
         } else {

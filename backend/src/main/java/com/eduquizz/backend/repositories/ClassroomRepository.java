@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
     Optional<Classroom> findByEnrollmentCode(String enrollmentCode);
-
+    List<Classroom> findAllByTeacherId(Long teacherId);
 }

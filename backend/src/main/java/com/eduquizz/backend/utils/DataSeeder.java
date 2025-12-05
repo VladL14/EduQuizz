@@ -6,6 +6,7 @@ import com.eduquizz.backend.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private ClassroomRepository classroomRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
         
@@ -29,7 +33,7 @@ public class DataSeeder implements CommandLineRunner {
             User prof = new User();
             prof.setUsername("profesor_vlad");
             prof.setEmail("vlad@edu.com");
-            prof.setPassword("parola123");
+            prof.setPassword(passwordEncoder.encode("parola123"));
             prof.setRole(RequestRole.TEACHER); 
             
             userRepository.save(prof); // Salvam în DB
@@ -38,13 +42,13 @@ public class DataSeeder implements CommandLineRunner {
             User s1 = new User();
             s1.setUsername("student_ion");
             s1.setEmail("ion@stud.com");
-            s1.setPassword("1234");
+            s1.setPassword(passwordEncoder.encode("1234"));
             s1.setRole(RequestRole.STUDENT);
             
             User s2 = new User();
             s2.setUsername("student_maria");
             s2.setEmail("maria@stud.com");
-            s2.setPassword("abcd");
+            s2.setPassword(passwordEncoder.encode("abcd"));
             s2.setRole(RequestRole.STUDENT);
 
             userRepository.saveAll(List.of(s1, s2));

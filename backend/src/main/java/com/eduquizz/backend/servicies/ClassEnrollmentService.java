@@ -16,14 +16,15 @@ import com.eduquizz.backend.utils.RequestRole;
 
 @Service
 public class ClassEnrollmentService {
-    @Autowired
-    private ClassEnrollmentRepository classEnrollmentRepository;
+    private final ClassEnrollmentRepository classEnrollmentRepository;
+    private final ClassroomRepository classroomRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ClassroomRepository classroomRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public ClassEnrollmentService(ClassEnrollmentRepository classEnrollmentRepository, ClassroomRepository classroomRepository, UserRepository userRepository) {
+        this.classEnrollmentRepository = classEnrollmentRepository;
+        this.classroomRepository = classroomRepository;
+        this.userRepository = userRepository;
+    }
 
     public ClassEnrollment enrollStudent(Long studentId, String code)
     {

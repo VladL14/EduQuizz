@@ -15,11 +15,13 @@ import com.eduquizz.backend.utils.RequestRole;
 
 @Service
 public class ClassroomService {
-    @Autowired
-    private ClassroomRepository classroomRepository;
+    private final ClassroomRepository classroomRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public ClassroomService(ClassroomRepository classroomRepository, UserRepository userRepository) {
+        this.classroomRepository = classroomRepository;
+        this.userRepository = userRepository;
+    }
 
     public List<Classroom> getAllClassrooms()
     {
@@ -44,8 +46,19 @@ public class ClassroomService {
         return classroomRepository.save(classroom);
     }
 
-    public Optional<Classroom> getAllClassroomById(Long id)
+    public Classroom getClassroomById(Long id)
     {
-        return classroomRepository.findById(id);
+        return classroomRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Classroom not found with id: " + id));
+    }
+
+    public void deleteClassroom(Long id)
+    {
+        Optional<Classroom> classroom = classroomRepository.findById(id);
+        if(classroom.isEmpty())
+        {
+            throw new RuntimeException("Classroom not found with id: " + id);
+        }
+
     }
 }

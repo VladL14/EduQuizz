@@ -22,7 +22,7 @@ public class Quiz
     @Column(name = "active_from")
     private LocalDateTime activeFrom;
     
-    @Column(name = "actitve_until")
+    @Column(name = "active_until")
     private LocalDateTime activeUntil;
 
     private Integer timeLimit;
@@ -34,30 +34,35 @@ public class Quiz
     public void setId(Long id) {
         this.id = id;
     }
+
     public Classroom getClassroom() {
         return classroom;
     }
     public void setClassroom(Classroom classroom) {
         this.classroom = classroom;
     }
+
     public String getTitle() {
         return title;
     }
     public void setTitle(String title) {
         this.title = title;
     }
+
     public LocalDateTime getActiveFrom() {
         return activeFrom;
     }
     public void setActiveFrom(LocalDateTime activeFrom) {
         this.activeFrom = activeFrom;
     }
-    public LocalDateTime getActiveUnitl() {
+
+    public LocalDateTime getActiveUntil() {
         return activeUntil;
     }
-    public void setActiveUnitl(LocalDateTime activeUnitl) {
-        this.activeUntil = activeUnitl;
+    public void setActiveUntil(LocalDateTime activeUntil) {
+        this.activeUntil = activeUntil;
     }
+
     public Integer getTimeLimit() {
         return timeLimit;
     }

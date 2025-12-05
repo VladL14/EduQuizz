@@ -1,0 +1,41 @@
+package com.eduquizz.backend.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import com.eduquizz.backend.entities.Quiz;
+import com.eduquizz.backend.dtos.QuizRequest;
+import com.eduquizz.backend.servicies.QuizService;
+
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("api/quizzes")
+public class QuizController {
+
+    @Autowired
+    private QuizService quizService;
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createQuiz(@RequestBody QuizRequest Request) {
+        try {
+            Quiz quiz = quizService.createQuiz(Request);
+            return ResponseEntity.ok(quiz);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/classroom/{classromId}")
+    public ResponseEntity<?> getQuizzesByClassroom(@PathVariable Long classromId) {
+        try{
+            List<Quiz> quizzes = quizService.getQuizzesByClassroom(classromId);
+            return ResponseEntity.ok(quizzes);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+}

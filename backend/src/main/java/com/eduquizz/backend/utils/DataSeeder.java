@@ -68,7 +68,7 @@ public class DataSeeder implements CommandLineRunner {
             Quiz quiz = new Quiz();
             quiz.setTitle("Test Java");
             quiz.setActiveFrom(LocalDateTime.now().withHour(14).withMinute(0));
-            quiz.setActiveUnitl(LocalDateTime.now().plusDays(2).withHour(16).withMinute(0));
+            quiz.setActiveUntil(LocalDateTime.now().plusDays(2).withHour(16).withMinute(0));
             quiz.setTimeLimit(60);
             quiz.setClassroom(clasaJava);
 

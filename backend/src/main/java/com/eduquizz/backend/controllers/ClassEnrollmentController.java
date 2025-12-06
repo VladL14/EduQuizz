@@ -19,7 +19,7 @@ public class ClassEnrollmentController {
     @Autowired
     private ClassEnrollmentService classEnrollmentService;
 
-    @PutMapping("/enrollStudent")
+    @PostMapping("/enrollStudent")
     public ResponseEntity<?> enrollStudent(@RequestBody ClassEnrollmentRequest request)
     {
         try

@@ -17,6 +17,6 @@ export class ClassService {
       studentId: studentId,
       code: code
     };
-    return this.http.put(`${this.apiUrl}/enrollStudent`, body);
+    return this.http.post(`${this.apiUrl}/enrollStudent`, body);
   }
 }

@@ -4,6 +4,9 @@ import com.eduquizz.backend.utils.RequestType;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "questions")
 public class Question {
@@ -21,6 +24,15 @@ public class Question {
     private RequestType type;
 
     private Integer points;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionOption> options = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionTestCase> testCases = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentResponse> responses = new ArrayList<>();
 
     // Getters and Setters
     public Long getId() {
@@ -53,4 +65,13 @@ public class Question {
     public void setPoints(Integer points) {
         this.points = points;
     }
+
+    public List<QuestionOption> getOptions() { return options; }
+    public void setOptions(List<QuestionOption> options) { this.options = options; }
+
+    public List<QuestionTestCase> getTestCases() { return testCases; }
+    public void setTestCases(List<QuestionTestCase> testCases) { this.testCases = testCases; }
+
+    public List<StudentResponse> getResponses() { return responses; }
+    public void setResponses(List<StudentResponse> responses) { this.responses = responses; }
 }

@@ -38,4 +38,24 @@ public class QuizController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateQuiz(@PathVariable Long id, @RequestBody QuizRequest request) {
+        try{
+            Quiz updateQuiz = quizService.updateQuiz(id, request);
+            return ResponseEntity.ok(updateQuiz);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteQuiz(@PathVariable Long id) {
+        try {
+            quizService.deleteQuiz(id);
+            return ResponseEntity.ok("Quiz deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

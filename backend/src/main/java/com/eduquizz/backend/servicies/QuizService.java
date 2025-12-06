@@ -60,4 +60,40 @@ public class QuizService {
         return quizRepository.findByClassroomId(classroomId);
     }
 
+    public void deleteQuiz(Long id) {
+        if (!quizRepository.existsById(id)) {
+            throw new RuntimeException("Quiz not found with id: " + id);
+        }
+        quizRepository.deleteById(id);
+    }
+
+
+    public Quiz updateQuiz(Long id, QuizRequest request) {
+        Quiz quiz = quizRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Quiz not found with id: " + id));
+
+        if (request.getTitle() != null && !request.getTitle().isEmpty()) {
+            quiz.setTitle(request.getTitle());
+        }
+
+        if (request.getTimeLimit() != null) {
+            if (request.getTimeLimit() <= 0) {
+                throw new RuntimeException("Time limit must be higher than 0");
+            }
+            quiz.setTimeLimit(request.getTimeLimit());
+        }
+
+        LocalDateTime newFrom = request.getActiveFrom() != null ? request.getActiveFrom() : quiz.getActiveFrom();
+        LocalDateTime newUntil = request.getActiveUntil() != null ? request.getActiveUntil() : quiz.getActiveUntil();
+
+        if (newFrom.isAfter(newUntil)) {
+            throw new RuntimeException("Active from must be before active until");
+        }
+
+        quiz.setActiveFrom(newFrom);
+        quiz.setActiveUntil(newUntil);
+
+        return quizRepository.save(quiz);
+    }
+
 }

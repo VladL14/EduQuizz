@@ -1,7 +1,9 @@
 package com.eduquizz.backend.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -26,6 +28,12 @@ public class Quiz
     private LocalDateTime activeUntil;
 
     private Integer timeLimit;
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuizAttempt> attempts = new ArrayList<>();
 
     // Getters and Setters
     public Long getId() {
@@ -69,4 +77,10 @@ public class Quiz
     public void setTimeLimit(Integer timeLimit) {
         this.timeLimit = timeLimit;
     }
+
+    public List<Question> getQuestions() { return questions; }
+    public void setQuestions(List<Question> questions) { this.questions = questions; }
+
+    public List<QuizAttempt> getAttempts() { return attempts; }
+    public void setAttempts(List<QuizAttempt> attempts) { this.attempts = attempts; }
 }

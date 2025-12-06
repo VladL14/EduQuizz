@@ -30,11 +30,10 @@ public class Quiz
     private Integer timeLimit;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions = new ArrayList<>();
+    private List<Question> questions;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<QuizAttempt> attempts = new ArrayList<>();
-
+    private List<QuizAttempt> attempts;
     // Getters and Setters
     public Long getId() {
         return id;

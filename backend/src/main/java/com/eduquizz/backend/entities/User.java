@@ -2,7 +2,10 @@ package com.eduquizz.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 import com.eduquizz.backend.utils.RequestRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -17,6 +20,11 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private RequestRole role;
+
+    // Un User are mai multe clase => Daca sterg User-ul, se sterg clasele
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Classroom> classrooms;
 
     // Getters and Setters
     public Long getId() {

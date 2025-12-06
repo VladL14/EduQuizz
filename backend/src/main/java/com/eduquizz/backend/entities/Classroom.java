@@ -1,5 +1,9 @@
 package com.eduquizz.backend.entities;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +17,16 @@ public class Classroom {
     private User teacher;
     private String className;
     private String enrollmentCode;
+
+    // O clasa are mai multe teste (quiz-uri) => Daca sterg clasa se sterg quiz-urile
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Quiz> quizzes;
+
+    // O clasa are mai multe enrollment-uri => Daca sterg clasa se sterg enrollment-urile ei
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ClassEnrollment> classEnrollments;
 
     // Getters and Setters
     public Long getId() {

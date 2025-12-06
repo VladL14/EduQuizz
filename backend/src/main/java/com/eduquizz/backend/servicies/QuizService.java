@@ -10,6 +10,8 @@ import com.eduquizz.backend.entities.Classroom;
 import com.eduquizz.backend.repositories.ClassroomRepository;
 import com.eduquizz.backend.repositories.QuizRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -60,10 +62,12 @@ public class QuizService {
         return quizRepository.findByClassroomId(classroomId);
     }
 
+    @Transactional
     public void deleteQuiz(Long id) {
         if (!quizRepository.existsById(id)) {
             throw new RuntimeException("Quiz not found with id: " + id);
         }
+
         quizRepository.deleteById(id);
     }
 

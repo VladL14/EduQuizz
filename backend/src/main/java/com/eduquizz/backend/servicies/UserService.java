@@ -10,6 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 import com.eduquizz.backend.repositories.ClassroomRepository;
 import com.eduquizz.backend.repositories.UserRepository;
 import com.eduquizz.backend.utils.RequestRole;
+
+import jakarta.transaction.Transactional;
+
 import com.eduquizz.backend.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.eduquizz.backend.entities.Classroom;
@@ -54,6 +57,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long userId)
     {
         Optional<User> existingUser = userRepository.findById(userId);
@@ -61,13 +65,7 @@ public class UserService {
         {
             throw new RuntimeException("User not found with id: " + userId);
         }
-
-        List<Classroom> classrooms = classroomRepository.findAllByTeacherId(userId);
-        if(!classrooms.isEmpty())
-        {
-            classroomRepository.deleteAll(classrooms);
-        }
-
+        
         userRepository.deleteById(userId);
     }
 }

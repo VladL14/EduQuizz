@@ -38,12 +38,10 @@ export class StudentDashboard implements OnInit {
   loadClasses() {
     this.classService.getStudentClasses(this.userId).subscribe({
       next: (data) => {
-        console.log(data)
         this.classes = data.map((cls, index) => ({
           ...cls,
           color: this.colors[index % this.colors.length]
         }));
-        console.log(this.classes)
         this.cdr.detectChanges()
       },
       error: (err) => {
@@ -74,6 +72,6 @@ export class StudentDashboard implements OnInit {
   }
 
   enterClass(classId: number) {
-    console.log("Intrăm în clasa:", classId);
+    this.router.navigate(['/student/class', classId]);
   }
 }

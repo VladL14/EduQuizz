@@ -25,6 +25,8 @@ public class DataSeeder implements CommandLineRunner {
     private QuizRepository quizRepository;
 
     @Autowired
+    private QuizAttemptRepository quizAttemptRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -91,6 +93,14 @@ public class DataSeeder implements CommandLineRunner {
             quiz3.setClassroom(clasaJava);
 
             quizRepository.save(quiz3);
+
+            QuizAttempt attempt = new QuizAttempt();
+            attempt.setStudent(s2);
+            attempt.setQuiz(quiz);
+            attempt.setStartTime(LocalDateTime.now().minusHours(2));
+            attempt.setStatus(1); // 1 = COMPLETED
+            attempt.setGrade(9);  // NOTA 9
+            quizAttemptRepository.save(attempt);
 
             System.out.println("Baza de date a fost populata cu succes!");
         }

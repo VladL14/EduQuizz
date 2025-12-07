@@ -1,17 +1,31 @@
 package com.eduquizz.backend.servicies;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import com.eduquizz.backend.dtos.ClassroomDashboardDTO;
+import com.eduquizz.backend.dtos.QuizSummaryDTO;
+import com.eduquizz.backend.dtos.StudentGradeDTO;
 import com.eduquizz.backend.entities.ClassEnrollment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.eduquizz.backend.entities.Classroom;
+import com.eduquizz.backend.entities.Quiz;
+import com.eduquizz.backend.entities.QuizAttempt;
 import com.eduquizz.backend.entities.User;
+import com.eduquizz.backend.repositories.ClassEnrollmentRepository;
 import com.eduquizz.backend.repositories.ClassroomRepository;
+import com.eduquizz.backend.repositories.QuizAttemptRepository;
+import com.eduquizz.backend.repositories.QuizRepository;
 import com.eduquizz.backend.repositories.UserRepository;
 import com.eduquizz.backend.utils.RequestRole;
 
@@ -19,10 +33,16 @@ import com.eduquizz.backend.utils.RequestRole;
 public class ClassroomService {
     private final ClassroomRepository classroomRepository;
     private final UserRepository userRepository;
+    private final QuizRepository quizRepository;
+    private final ClassEnrollmentRepository classEnrollmentRepository;
+    private final QuizAttemptRepository quizAttemptRepository;
 
-    public ClassroomService(ClassroomRepository classroomRepository, UserRepository userRepository) {
+    public ClassroomService(ClassroomRepository classroomRepository, UserRepository userRepository, QuizRepository quizRepository, ClassEnrollmentRepository classEnrollmentRepository, QuizAttemptRepository quizAttemptRepository) {
         this.classroomRepository = classroomRepository;
         this.userRepository = userRepository;
+        this.quizRepository = quizRepository;
+        this.classEnrollmentRepository = classEnrollmentRepository;
+        this.quizAttemptRepository = quizAttemptRepository;
     }
 
     public List<Classroom> getAllClassrooms()
@@ -56,12 +76,13 @@ public class ClassroomService {
 
     public void deleteClassroom(Long id)
     {
-        Optional<Classroom> classroom = classroomRepository.findById(id);
-        if(classroom.isEmpty())
+        Optional<Classroom> classroomOpt = classroomRepository.findById(id);
+        if(classroomOpt.isEmpty())
         {
             throw new RuntimeException("Classroom not found with id: " + id);
         }
 
+        classroomRepository.delete(classroomOpt.get());
     }
 
     public List<Classroom> getClassroomsByTeacherId(Long teacherId)
@@ -80,5 +101,54 @@ public class ClassroomService {
         List<Classroom> classrooms = classroomRepository.findAllByTeacherId(teacherId);
 
         return classrooms;
+    }
+
+    public ClassroomDashboardDTO getClassroomDashboard(Long classroomId, Long teacherId)
+    {
+        Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(() -> new RuntimeException("Classroom with id: " + classroomId + " not found."));
+        
+        if(!classroom.getTeacher().getId().equals(teacherId))
+        {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User with id: " + teacherId + " is not a TEACHER");
+        }
+
+        List<Quiz> quizzes = quizRepository.findByClassroomId(classroomId);
+        List<QuizSummaryDTO> quizDTOs = quizzes.stream()
+                .map(q -> new QuizSummaryDTO(q.getId(), q.getTitle()))
+                .collect(Collectors.toList());
+
+        List<ClassEnrollment> classEnrollments = classEnrollmentRepository.findAllByClassroomId(classroomId);
+        List<User> students = classEnrollments.stream().map(ClassEnrollment::getStudent).collect(Collectors.toList());
+        
+        List<QuizAttempt> attempts = quizAttemptRepository.findByQuizClassroomId(classroomId);
+
+        List<StudentGradeDTO> studentGrades = new ArrayList<>();
+
+        for(User student : students)
+        {
+            Map<Long, Integer> grades = new HashMap<>();
+            
+            for(QuizAttempt attempt : attempts)
+            {
+                if(attempt.getStudent().getId().equals(student.getId()) && attempt.getGrade() != null)
+                {
+                    grades.put(attempt.getQuiz().getId(), attempt.getGrade());
+                }
+            }
+
+            studentGrades.add(new StudentGradeDTO(
+                    student.getId(),
+                    student.getUsername(),
+                    student.getEmail(),
+                    grades
+                ));
+        }
+        return new ClassroomDashboardDTO(
+            classroom.getId(),
+            classroom.getClassName(),
+            classroom.getEnrollmentCode(),
+            quizDTOs,
+            studentGrades
+        );
     }
 }

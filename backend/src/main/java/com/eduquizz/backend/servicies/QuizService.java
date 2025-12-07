@@ -59,7 +59,14 @@ public class QuizService {
     }
 
     public List<Quiz> getQuizzesByClassroom(Long classroomId) {
-        return quizRepository.findByClassroomId(classroomId);
+        List<Quiz> quizzes = quizRepository.findByClassroomId(classroomId);
+
+        if(classroomRepository.findById(classroomId).isEmpty())
+        {
+            throw new RuntimeException("Classroom with id: " + classroomId + " not found");
+        }
+
+        return quizzes;
     }
 
     @Transactional
@@ -75,6 +82,11 @@ public class QuizService {
     public Quiz updateQuiz(Long id, QuizRequest request) {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Quiz not found with id: " + id));
+
+        if(quiz.getActiveUntil().isBefore(LocalDateTime.now()))
+        {
+            throw new RuntimeException("The quiz is already finished and cannot be updated.");
+        }
 
         if (request.getTitle() != null && !request.getTitle().isEmpty()) {
             quiz.setTitle(request.getTitle());

@@ -29,7 +29,7 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/classroom/{classromId}")
+    @GetMapping("/{classromId}")
     public ResponseEntity<?> getQuizzesByClassroom(@PathVariable Long classromId) {
         try{
             List<Quiz> quizzes = quizService.getQuizzesByClassroom(classromId);

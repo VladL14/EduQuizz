@@ -69,4 +69,22 @@ public class ClassEnrollmentService {
 
         return classrooms;
     }
+
+    public List<User> getStudentsByClassroomId(Long classroomId)
+    {
+        List<User> students = new ArrayList<>();
+        List<ClassEnrollment> classEnrollments = classEnrollmentRepository.findAllByClassroomId(classroomId);
+        
+        if(classEnrollments.isEmpty())
+        {
+            throw new RuntimeException("Classroom with id: " + classroomId + " not found");
+        }
+
+        for(ClassEnrollment classEnrollment : classEnrollments)
+        {
+            students.add(classEnrollment.getStudent());
+        }
+
+        return students;
+    }
 }

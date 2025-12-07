@@ -1,5 +1,6 @@
 package com.eduquizz.backend.entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,9 +22,10 @@ public class QuizAttempt {
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    private Date startTime;
+    private LocalDateTime startTime;
     private Integer status; // 0 = in progress, 1 = completed
 
+    private Integer grade;
     @OneToMany(mappedBy = "quizAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentResponse> responses = new ArrayList<>();
 
@@ -53,11 +55,11 @@ public class QuizAttempt {
         this.quiz = quiz;
     }
 
-    public Date getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
@@ -67,6 +69,16 @@ public class QuizAttempt {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getGrade()
+    {
+        return this.grade;
+    }
+
+    public void setGrade(Integer grade)
+    {
+        this.grade = grade;
     }
 
     public List<StudentResponse> getResponses() { return responses; }

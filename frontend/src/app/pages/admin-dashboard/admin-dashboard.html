@@ -1,1 +1,120 @@
-<p>admin-dashboard works!</p>
+<nav class="bg-white shadow-md w-full z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <div class="flex-shrink-0 flex items-center gap-3">
+        <h1 class="text-3xl font-extrabold text-indigo-600 tracking-tight">EduQuizz</h1>
+        <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-md border border-indigo-200">PROFESOR</span>
+      </div>
+      <button (click)="logout()" class="text-gray-500 hover:text-red-600 font-medium px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-2">
+        <span>Ieșire</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12" /></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="min-h-[calc(100vh-64px)] bg-gray-50 flex flex-col py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
+    <h2 class="text-2xl text-gray-800">Salut, <span class="font-bold text-indigo-700">{{ username }}</span>! 👋</h2>
+    <p class="text-gray-500 mt-1">Gestionează clasele tale.</p>
+  </div>
+
+  <div class="w-full overflow-x-auto pb-12 pt-4 px-10 scrollbar-hide">
+    <div class="flex gap-6 w-max">
+      
+      <div *ngFor="let cls of classes" class="shrink-0 w-80 h-[450px] relative rounded-3xl shadow-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl bg-white flex flex-col group cursor-pointer">
+        <div [class]="cls.color + ' h-1/3 w-full flex items-center justify-center relative'">
+          <div class="absolute inset-0 bg-black opacity-10 group-hover:opacity-0 transition-opacity"></div>
+          <span class="text-white text-4xl font-bold opacity-80 select-none">
+            {{ cls.className ? cls.className.substring(0, 2).toUpperCase() : '??' }}
+          </span>
+        </div>
+
+        <div class="p-6 flex flex-col flex-grow justify-between text-center">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2 leading-tight min-h-[3.5rem] flex items-center justify-center">{{ cls.className }}</h3>
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-lg border border-gray-200 mb-4">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Cod:</span>
+              <span class="text-sm font-bold text-indigo-600 font-mono select-all">{{ cls.enrollmentCode }}</span>
+            </div>
+          </div>
+
+          <button (click)="manageClass(cls.id)" class="w-full mt-4 bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-indigo-600 transition-colors shadow-lg flex justify-center items-center gap-2">
+            Gestionează
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
+          </button>
+        </div>
+      </div>
+
+      <div (click)="openCreateModal()" class="shrink-0 w-80 h-[450px] rounded-3xl border-2 border-dashed border-indigo-300 bg-indigo-50/30 flex flex-col items-center justify-center hover:border-indigo-500 hover:bg-indigo-50 transition-all cursor-pointer group">
+        <div class="w-16 h-16 rounded-full bg-white shadow-sm border border-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-indigo-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+        </div>
+        <span class="text-indigo-700 font-bold text-lg group-hover:text-indigo-900">Creează o clasă nouă</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    
+    <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" (click)="closeModal()"></div>
+  
+    <div class="relative z-10 bg-white rounded-xl text-left shadow-2xl transform transition-all w-full max-w-md overflow-hidden border border-gray-100">
+        
+      <div class="bg-white px-6 pt-6 pb-4">
+        <div class="flex flex-col items-center text-center">
+            
+            <div class="h-12 w-12 rounded-full bg-indigo-50 flex items-center justify-center mb-4">
+                <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-900" id="modal-title">
+                Clasă Nouă
+            </h3>
+            <p class="text-sm text-gray-500 mt-1 mb-6">
+                Introdu numele pentru a genera un spațiu nou de lucru.
+            </p>
+
+            <div class="w-full text-left">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Numele clasei</label>
+                <input 
+                    type="text" 
+                    [(ngModel)]="newClassName" 
+                    (keyup.enter)="createClass()"
+                    placeholder="Ex: Informatică 10B"
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                >
+            </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 px-6 py-4 flex flex-row-reverse gap-3">
+        <button 
+            type="button" 
+            (click)="createClass()" 
+            [disabled]="isLoading || !newClassName" 
+            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2.5 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            
+            <span *ngIf="isLoading" class="mr-2 flex items-center">
+                <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </span>
+            {{ isLoading ? 'Se creează...' : 'Creează Clasa' }}
+        </button>
+        <button 
+            type="button" 
+            (click)="closeModal()" 
+            class="w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2.5 bg-white text-base font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm transition-colors">
+            Anulează
+        </button>
+      </div>
+
+    </div>
+</div>

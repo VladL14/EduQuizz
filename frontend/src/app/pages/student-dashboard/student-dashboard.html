@@ -22,9 +22,9 @@
   </div>
 </nav>
 
-<div class="min-h-[calc(100vh-64px)] bg-gray-50 flex flex-col justify-center py-10">
+<div class="min-h-[calc(100vh-64px)] bg-gray-50 flex flex-col py-10">
   
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
     <h2 class="text-2xl text-gray-800">
       Salut, <span class="font-bold text-indigo-700">{{ username }}</span>! 👋
     </h2>
@@ -38,50 +38,52 @@
     </p>
   </div>
 
-  <div class="w-full overflow-x-auto pb-12 pt-4 px-10 snap-x snap-mandatory flex gap-6 scrollbar-hide justify-start">
-    
-    <div *ngFor="let cls of classes" 
-         class="snap-center shrink-0 w-80 h-[450px] relative rounded-3xl shadow-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl bg-white flex flex-col group cursor-pointer">
+  <div class="w-full overflow-x-auto pb-12 pt-4 px-10 scrollbar-hide">
+    <div class="flex gap-6 w-max">
       
-      <div [class]="cls.color + ' h-1/3 w-full flex items-center justify-center relative'">
-        <div class="absolute inset-0 bg-black opacity-10 group-hover:opacity-0 transition-opacity"></div>
-        <span class="text-white text-4xl font-bold opacity-80 select-none">
-          {{ cls.className ? cls.className.substring(0, 2).toUpperCase() : '??' }}
-        </span>
-      </div>
-
-      <div class="p-6 flex flex-col flex-grow justify-between text-center">
-        <div>
-           <h3 class="text-xl font-bold text-gray-900 mb-2 leading-tight min-h-[3.5rem] flex items-center justify-center">
-            {{ cls.className }}
-          </h3>
-
-          <p class="text-sm font-medium text-indigo-500 mb-4">
-            Prof: {{ cls.teacher?.username }} 
-          </p>
+      <div *ngFor="let cls of classes" 
+           class="shrink-0 w-80 h-[450px] relative rounded-3xl shadow-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl bg-white flex flex-col group cursor-pointer">
+        
+        <div [class]="cls.color + ' h-1/3 w-full flex items-center justify-center relative'">
+          <div class="absolute inset-0 bg-black opacity-10 group-hover:opacity-0 transition-opacity"></div>
+          <span class="text-white text-4xl font-bold opacity-80 select-none">
+            {{ cls.className ? cls.className.substring(0, 2).toUpperCase() : '??' }}
+          </span>
         </div>
 
-        <button 
-          (click)="enterClass(cls.id)"
-          class="w-full mt-4 bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-indigo-600 transition-colors shadow-lg flex justify-center items-center gap-2">
-          Vezi Testele
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-            <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+        <div class="p-6 flex flex-col flex-grow justify-between text-center">
+          <div>
+             <h3 class="text-xl font-bold text-gray-900 mb-2 leading-tight min-h-[3.5rem] flex items-center justify-center">
+              {{ cls.className }}
+            </h3>
+
+            <p class="text-sm font-medium text-indigo-500 mb-4">
+              Prof: {{ cls.teacher?.username }} 
+            </p>
+          </div>
+
+          <button 
+            (click)="enterClass(cls.id)"
+            class="w-full mt-4 bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-indigo-600 transition-colors shadow-lg flex justify-center items-center gap-2">
+            Vezi Testele
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <div (click)="enroll()" 
+           class="shrink-0 w-80 h-[450px] rounded-3xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-indigo-400 hover:bg-indigo-50 transition-all cursor-pointer group">
+        <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-indigo-200 transition-colors mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400 group-hover:text-indigo-600">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-        </button>
+        </div>
+        <span class="text-gray-500 font-medium group-hover:text-indigo-600">Înscrie-te la o clasă</span>
       </div>
 
     </div>
-
-    <div (click)="enroll()" 
-         class="snap-center shrink-0 w-80 h-[450px] rounded-3xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center hover:border-indigo-400 hover:bg-indigo-50 transition-all cursor-pointer group">
-      <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-indigo-200 transition-colors mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400 group-hover:text-indigo-600">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-      </div>
-      <span class="text-gray-500 font-medium group-hover:text-indigo-600">Înscrie-te la o clasă</span>
-    </div>
-
   </div>
 </div>

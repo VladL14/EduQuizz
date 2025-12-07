@@ -5,9 +5,9 @@
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
       </svg>
-      Înapoi la Cursuri
+      Inapoi la Cursuri
     </button>
-    <h1 class="text-2xl font-bold text-gray-900">Teste și Activități</h1>
+    <h1 class="text-2xl font-bold text-gray-900">Teste</h1>
   </div>
 
   <div class="max-w-4xl mx-auto space-y-10">
@@ -28,10 +28,10 @@
             
             <div class="mt-2 text-sm text-gray-600 space-y-1">
               <p>
-                Timp limită: <span class="font-bold text-gray-900">{{ quiz.timeLimit }} min</span>
+                Timp limita: <span class="font-bold text-gray-900">{{ quiz.timeLimit }} min</span>
               </p>
               <p>
-                Se închide la: <span class="font-semibold text-red-600">
+                Se inchide la: <span class="font-semibold text-red-600">
                   {{ quiz.activeUntil | date:'dd MMM, HH:mm' }}
                 </span>
               </p>
@@ -39,7 +39,7 @@
           </div>
 
           <button (click)="startQuiz(quiz.id)" class="mt-4 sm:mt-0 px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow transition-colors flex items-center gap-2">
-            ÎNCEPE TESTUL
+            INCEPE TESTUL
           </button>
         </div>
       </div>
@@ -47,7 +47,7 @@
 
     <div *ngIf="upcomingQuizzes.length > 0">
       <h2 class="text-xl font-bold text-gray-800 mb-4 text-indigo-600">
-        Urmează
+        Urmeaza
       </h2>
       <div class="grid gap-4">
         <div *ngFor="let quiz of upcomingQuizzes" class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 opacity-90">
@@ -59,7 +59,7 @@
                 Deschidere: <span class="font-medium text-gray-700">{{ quiz.activeFrom | date:'dd MMM yyyy, HH:mm' }}</span>
               </p>
               <p class="text-sm text-gray-500">
-                Durată propusă: {{ quiz.timeLimit }} min
+                Durata propusa: {{ quiz.timeLimit }} min
               </p>
             </div>
             <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programat</span>
@@ -74,7 +74,7 @@
         <div *ngFor="let quiz of pastQuizzes" class="bg-gray-100 rounded-lg p-5 border border-gray-200 opacity-75">
           <div>
             <h3 class="text-lg font-medium text-gray-700">{{ quiz.title }}</h3>
-            <p class="text-xs text-gray-500">S-a închis pe: {{ quiz.activeUntil | date:'dd/MM/yyyy HH:mm' }}</p>
+            <p class="text-xs text-gray-500">S-a inchis pe: {{ quiz.activeUntil | date:'dd/MM/yyyy HH:mm' }}</p>
             <p class="text-xs text-red-500 font-bold mt-1">Expirat</p>
           </div>
         </div>
@@ -82,7 +82,7 @@
     </div>
     
     <div *ngIf="activeQuizzes.length === 0 && upcomingQuizzes.length === 0 && pastQuizzes.length === 0" class="text-center py-12">
-       <p class="text-gray-400">Nu există date.</p>
+       <p class="text-gray-400">Nu exista teste disponibile</p>
     </div>
 
   </div>

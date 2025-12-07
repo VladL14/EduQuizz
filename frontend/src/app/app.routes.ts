@@ -4,6 +4,7 @@ import { Register } from './pages/register/register';
 import { AdminDashboard } from './pages/admin-dashboard/admin-dashboard';
 import { StudentDashboard } from './pages/student-dashboard/student-dashboard';
 import { StudentQuizz } from './pages/student-quizz/student-quizz';
+import { StudentTakeQuizz } from './pages/student-take-quizz/student-take-quizz';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'admin', component: AdminDashboard },
   { path: 'student', component: StudentDashboard },
   { path: 'student/class/:id', component: StudentQuizz},
+  { path: 'student/quiz/:id/take', component: StudentTakeQuizz},
   { path: '**', redirectTo: 'login' }
 ];

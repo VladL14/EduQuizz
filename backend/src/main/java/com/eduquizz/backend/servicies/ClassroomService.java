@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.eduquizz.backend.entities.ClassEnrollment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +62,23 @@ public class ClassroomService {
             throw new RuntimeException("Classroom not found with id: " + id);
         }
 
+    }
+
+    public List<Classroom> getClassroomsByTeacherId(Long teacherId)
+    {
+        Optional<User> userOpt = userRepository.findById(teacherId);
+        if(userOpt.isEmpty())
+        {
+            throw new RuntimeException("User not found with id: " + teacherId);
+        }
+
+        if(userOpt.get().getRole() != RequestRole.TEACHER)
+        {
+            throw new RuntimeException("User with id: " + teacherId + " is not a TEACHER");
+        }
+
+        List<Classroom> classrooms = classroomRepository.findAllByTeacherId(teacherId);
+
+        return classrooms;
     }
 }

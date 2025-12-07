@@ -64,15 +64,33 @@ public class DataSeeder implements CommandLineRunner {
             clasaJava.setTeacher(prof);
             
             classroomRepository.save(clasaJava);
-            
+
             Quiz quiz = new Quiz();
-            quiz.setTitle("Test Java");
-            quiz.setActiveFrom(LocalDateTime.now().withHour(14).withMinute(0));
-            quiz.setActiveUntil(LocalDateTime.now().plusDays(2).withHour(16).withMinute(0));
+            quiz.setTitle("Test Java 1");
+            quiz.setActiveFrom(LocalDateTime.of(2025, 12, 5, 14, 0));
+            quiz.setActiveUntil(LocalDateTime.of(2025, 12, 5, 16, 0));
             quiz.setTimeLimit(60);
             quiz.setClassroom(clasaJava);
 
             quizRepository.save(quiz);
+
+            Quiz quiz2 = new Quiz();
+            quiz2.setTitle("Test Java 2");
+            quiz2.setActiveFrom(LocalDateTime.now().withHour(11).withMinute(0));
+            quiz2.setActiveUntil(LocalDateTime.now().plusDays(2).withHour(16).withMinute(0));
+            quiz2.setTimeLimit(60);
+            quiz2.setClassroom(clasaJava);
+
+            quizRepository.save(quiz2);
+
+            Quiz quiz3 = new Quiz();
+            quiz3.setTitle("Test Java 3");
+            quiz3.setActiveFrom(LocalDateTime.now().plusDays(2).withHour(14).withMinute(0));
+            quiz3.setActiveUntil(LocalDateTime.now().plusDays(2).withHour(16).withMinute(0));
+            quiz3.setTimeLimit(60);
+            quiz3.setClassroom(clasaJava);
+
+            quizRepository.save(quiz3);
 
             System.out.println("Baza de date a fost populata cu succes!");
         }

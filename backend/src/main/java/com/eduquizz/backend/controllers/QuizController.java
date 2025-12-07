@@ -29,10 +29,10 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/{classromId}")
-    public ResponseEntity<?> getQuizzesByClassroom(@PathVariable Long classromId) {
+    @GetMapping("/{classroomId}")
+    public ResponseEntity<?> getQuizzesByClassroom(@PathVariable Long classroomId) {
         try{
-            List<Quiz> quizzes = quizService.getQuizzesByClassroom(classromId);
+            List<Quiz> quizzes = quizService.getQuizzesByClassroom(classroomId);
             return ResponseEntity.ok(quizzes);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

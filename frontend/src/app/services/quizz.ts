@@ -11,6 +11,6 @@ export class QuizService {
 
   constructor(private http: HttpClient) {}
   getQuizzesByClassroom(classroomId: number): Observable<Quiz[]> {
-    return this.http.get<Quiz[]>(`${this.apiUrl}/classroom/${classroomId}`);
+    return this.http.get<Quiz[]>(`${this.apiUrl}/${classroomId}`);
   }
 }

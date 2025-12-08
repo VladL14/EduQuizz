@@ -1,14 +1,15 @@
 import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ClassService } from '../../services/class';
 import { QuizService } from '../../services/quizz';
-import { ClassroomDashboard } from '../../interfaces/dashboard';
+import { ClassroomDashboard, QuizSummary } from '../../interfaces/dashboard';
 
 @Component({
   selector: 'app-class-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './class-dashboard.html',
   styleUrl: './class-dashboard.css',
 })
@@ -17,6 +18,16 @@ classId: number = 0;
   teacherId: number = 0;
   dashboardData: ClassroomDashboard | null = null;
   isLoading: boolean = true;
+  isEditModalOpen: boolean = false;
+  isSaving: boolean = false;
+
+  editFormData = {
+    quizId: 0,
+    title: '',
+    timeLimit: 0,
+    activeFrom: '',
+    activeUntil: ''
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -61,9 +72,58 @@ classId: number = 0;
     });
   }
 
+  openEditModal(quiz: QuizSummary) {
+    this.editFormData = {
+      quizId: quiz.quizId,
+      title: quiz.name,
+      timeLimit: quiz.timeLimit,
+      activeFrom: this.formatDateForInput(quiz.activeFrom),
+      activeUntil: this.formatDateForInput(quiz.activeUntil)
+    };
+    
+    this.isEditModalOpen = true;
+  }
+
+  closeEditModal() {
+    this.isEditModalOpen = false;
+    this.isSaving = false;
+  }
+
+  saveQuizChanges() {
+    if (!this.editFormData.title || !this.editFormData.activeFrom || !this.editFormData.activeUntil) {
+        alert("Toate câmpurile sunt obligatorii!");
+        return;
+    }
+
+    this.isSaving = true;
+
+    const updateRequest = {
+      title: this.editFormData.title,
+      timeLimit: this.editFormData.timeLimit,
+      activeFrom: this.editFormData.activeFrom, 
+      activeUntil: this.editFormData.activeUntil,
+      classroomId: this.classId
+    };
+
+    this.quizService.updateQuiz(this.editFormData.quizId, updateRequest).subscribe({
+      next: () => {
+        this.closeEditModal();
+        this.loadDashboard();
+      },
+      error: (err) => {
+        console.error(err);
+        alert("Eroare la actualizare: " + (err.error || err.message));
+        this.isSaving = false;
+      }
+    });
+  }
+  private formatDateForInput(dateString: string): string {
+    if (!dateString) return '';
+    return new Date(dateString).toISOString().slice(0, 16);
+  }
 
   createQuiz() {
-    alert("Urmează funcționalitatea de creare quiz!");
+    this.router.navigate(['/teacher/create-quiz'], { queryParams: { classId: this.classId } });
   }
 
   deleteQuiz(quizId: number) {
@@ -73,42 +133,6 @@ classId: number = 0;
         this.loadDashboard();
       });
     }
-  }
-
-  editQuiz(quiz: any) {
-    const newTitle = prompt("Modifică Titlul:", quiz.title);
-    if (newTitle === null) return;
-
-    const newTimeLimitStr = prompt("Modifică Durata (minute):", quiz.timeLimit);
-    if (newTimeLimitStr === null) return;
-    const newTimeLimit = parseInt(newTimeLimitStr);
-
-    const currentStart = quiz.activeFrom ? quiz.activeFrom.replace(' ', 'T') : '';
-    const newActiveFrom = prompt("Data Început (Format: YYYY-MM-DDTHH:mm:ss):", currentStart);
-    if (newActiveFrom === null) return;
-
-    const currentEnd = quiz.activeUntil ? quiz.activeUntil.replace(' ', 'T') : '';
-    const newActiveUntil = prompt("Data Sfârșit (Format: YYYY-MM-DDTHH:mm:ss):", currentEnd);
-    if (newActiveUntil === null) return;
-
-    const updateRequest = {
-      title: newTitle,
-      timeLimit: newTimeLimit,
-      activeFrom: newActiveFrom,
-      activeUntil: newActiveUntil,
-      classroomId: this.classId
-    };
-
-    this.quizService.updateQuiz(quiz.quizId, updateRequest).subscribe({
-      next: (response) => {
-        alert("Quiz actualizat cu succes!");
-        this.loadDashboard(); 
-      },
-      error: (err) => {
-        console.error(err);
-        alert("Eroare la actualizare: " + (err.error || err.message));
-      }
-    });
   }
 
   copyCode() {

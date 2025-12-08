@@ -1,0 +1,100 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+  
+  <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+    
+    <div class="bg-indigo-600 px-8 py-6 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-white">Creare Quiz Nou</h1>
+      <button (click)="goBack()" class="text-indigo-100 hover:text-white text-sm font-medium">
+        Anulează
+      </button>
+    </div>
+
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="p-8 space-y-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-gray-100">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Titlu Quiz</label>
+          <input type="text" formControlName="title" placeholder="Ex: Test Recapitulativ Java" 
+                 class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Începe la</label>
+          <input type="datetime-local" formControlName="activeFrom" 
+                 class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Se termină la</label>
+          <input type="datetime-local" formControlName="activeUntil" 
+                 class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+
+        <div>
+           <label class="block text-sm font-semibold text-gray-700 mb-1">Timp Limită (minute)</label>
+           <input type="number" formControlName="timeLimit" 
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-bold text-gray-800">Întrebări</h2>
+          <button type="button" (click)="addQuestion()" class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-semibold hover:bg-indigo-100 transition">
+            + Adaugă Întrebare
+          </button>
+        </div>
+
+        <div formArrayName="questions" class="space-y-6">
+          <div *ngFor="let q of questions.controls; let i = index" [formGroupName]="i" 
+               class="bg-gray-50 p-6 rounded-xl border border-gray-200 relative group">
+            
+            <button type="button" (click)="removeQuestion(i)" class="absolute top-4 right-4 text-gray-400 hover:text-red-500">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+            </button>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div class="md:col-span-3">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Text Întrebare #{{i+1}}</label>
+                <input type="text" formControlName="text" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-indigo-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Puncte</label>
+                <input type="number" formControlName="points" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-indigo-500 outline-none">
+              </div>
+            </div>
+
+            <div formArrayName="options" class="ml-4 pl-4 border-l-2 border-indigo-200">
+              <label class="block text-xs font-bold text-indigo-500 uppercase mb-2">Variante de răspuns</label>
+              
+              <div *ngFor="let opt of getOptions(i).controls; let j = index" [formGroupName]="j" class="flex items-center gap-3 mb-2">
+                <input type="checkbox" formControlName="isCorrect" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300 cursor-pointer" title="Marchează ca răspuns corect">
+                
+                <input type="text" formControlName="text" placeholder="Opțiune..." 
+                       class="flex-grow px-3 py-1.5 bg-white border border-gray-300 rounded text-sm focus:border-indigo-500 outline-none">
+                
+                <button type="button" (click)="removeOption(i, j)" class="text-red-300 hover:text-red-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+
+              <button type="button" (click)="addOption(i)" class="mt-2 text-xs font-medium text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+                + Adaugă Opțiune
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-6 border-t border-gray-100 flex justify-end">
+        <button type="submit" [disabled]="isSubmitting" class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition transform active:scale-95 disabled:opacity-50">
+          {{ isSubmitting ? 'Se salvează...' : 'Salvează Quiz-ul' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -114,7 +114,7 @@ public class ClassroomService {
 
         List<Quiz> quizzes = quizRepository.findByClassroomId(classroomId);
         List<QuizSummaryDTO> quizDTOs = quizzes.stream()
-                .map(q -> new QuizSummaryDTO(q.getId(), q.getTitle()))
+                .map(q -> new QuizSummaryDTO(q.getId(), q.getTitle(), q.getActiveFrom(), q.getActiveUntil(), q.getTimeLimit()))
                 .collect(Collectors.toList());
 
         List<ClassEnrollment> classEnrollments = classEnrollmentRepository.findAllByClassroomId(classroomId);

@@ -104,7 +104,7 @@ export class AdminDashboard implements OnInit {
             console.error('Eroare la crearea clasei:', err);
             alert("Eroare la crearea clasei: " + (err.message || 'Eroare necunoscută'));
             this.isLoading = false;
-            this.closeModal(); // Închide modalul și în caz de eroare
+            this.closeModal();
         },
         complete: () => {
             console.log('Request completat');

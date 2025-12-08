@@ -119,7 +119,13 @@ classId: number = 0;
   }
   private formatDateForInput(dateString: string): string {
     if (!dateString) return '';
-    return new Date(dateString).toISOString().slice(0, 16);
+    const date = new Date(dateString);
+    // Compensăm offsetul local (ex: +2 ore)
+    const offset = date.getTimezoneOffset(); // în minute
+  
+    const localDate = new Date(date.getTime() - offset * 60000);
+  
+    return localDate.toISOString().slice(0, 16);
   }
 
   createQuiz() {

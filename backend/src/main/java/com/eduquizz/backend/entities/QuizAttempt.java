@@ -22,7 +22,6 @@ public class QuizAttempt {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
-    @JsonIgnore
     private Quiz quiz;
 
     private LocalDateTime startTime;

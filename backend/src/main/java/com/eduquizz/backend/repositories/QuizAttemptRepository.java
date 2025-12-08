@@ -12,6 +12,7 @@ import com.eduquizz.backend.entities.QuizAttempt;
 public interface QuizAttemptRepository extends JpaRepository<QuizAttempt, Long>{
 
     List<QuizAttempt> findByQuizClassroomId(Long classroomId);
-    Optional<QuizAttempt> findByStudentIdAndQuizId(Long studentId, Long quizId); 
+    Optional<QuizAttempt> findByStudentIdAndQuizId(Long studentId, Long quizId);
+    List<QuizAttempt> findByStudentIdAndQuizClassroomId(Long studentId, Long classroomId);
 
 }

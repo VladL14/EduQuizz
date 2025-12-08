@@ -13,6 +13,8 @@ import com.eduquizz.backend.repositories.QuizRepository;
 import com.eduquizz.backend.repositories.UserRepository;
 import com.eduquizz.backend.utils.RequestRole;
 
+import java.util.List;
+
 @Service
 public class QuizAttemptService {
     private final QuizAttemptRepository quizAttemptRepository;
@@ -32,5 +34,9 @@ public class QuizAttemptService {
 
         return quizAttemptRepository.findByStudentIdAndQuizId(studentId, quizId)
             .orElseThrow(() -> new RuntimeException("The student hasn't started the test yet."));
+    }
+
+    public List<QuizAttempt> getStudentAttemptsByClassroom(Long studentId, Long classroomId) {
+        return quizAttemptRepository.findByStudentIdAndQuizClassroomId(studentId, classroomId);
     }
 }

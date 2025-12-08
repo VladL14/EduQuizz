@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -33,6 +34,7 @@ public class Quiz
     private List<Question> questions;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<QuizAttempt> attempts;
     // Getters and Setters
     public Long getId() {

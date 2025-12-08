@@ -4,28 +4,41 @@ package com.eduquizz.backend.servicies;
 
 
 import org.springframework.stereotype.Service;
+
+import com.eduquizz.backend.dtos.QuestionOptionRequest;
+import com.eduquizz.backend.dtos.QuestionRequest;
 import com.eduquizz.backend.dtos.QuizRequest;
 import com.eduquizz.backend.entities.Quiz;
 import com.eduquizz.backend.entities.Classroom;
+import com.eduquizz.backend.entities.Question;
+import com.eduquizz.backend.entities.QuestionOption;
 import com.eduquizz.backend.repositories.ClassroomRepository;
+import com.eduquizz.backend.repositories.QuestionOptionRepository;
+import com.eduquizz.backend.repositories.QuestionRepository;
 import com.eduquizz.backend.repositories.QuizRepository;
 
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class QuizService {
     private final ClassroomRepository classroomRepository;
     private final QuizRepository quizRepository;
+    private final QuestionRepository questionRepository;
+    private final QuestionOptionRepository questionOptionRepository;
 
-    public QuizService(ClassroomRepository classroomRepository, QuizRepository quizRepository)
+    public QuizService(ClassroomRepository classroomRepository, QuizRepository quizRepository, QuestionRepository questionRepository, QuestionOptionRepository questionOptionRepository)
     {
         this.classroomRepository = classroomRepository;
         this.quizRepository = quizRepository;
+        this.questionRepository = questionRepository;
+        this.questionOptionRepository = questionOptionRepository;
     }
 
+    @Transactional
     public Quiz createQuiz(QuizRequest request) {
         Integer timeLimit = request.getTimeLimit();
         LocalDateTime activeFrom = request.getActiveFrom();
@@ -55,7 +68,30 @@ public class QuizService {
         quiz.setActiveUntil(request.getActiveUntil());
         quiz.setTimeLimit(request.getTimeLimit());
 
-        return quizRepository.save(quiz);
+        quizRepository.save(quiz);
+
+        for(QuestionRequest questionRequest : request.getQuestionRequest())
+        {
+            Question question = new Question();
+            question.setQuiz(quiz);
+            question.setPoints(questionRequest.getPoints());
+            question.setText(questionRequest.getText());
+            question.setType(questionRequest.getType());
+            questionRepository.save(question);
+
+            for(QuestionOptionRequest questionOptionRequest : questionRequest.getQuestionOptionRequest())
+            {
+                QuestionOption questionOption = new QuestionOption();
+                questionOption.setQuestion(question);
+                questionOption.setText(questionOptionRequest.getText());
+                questionOption.setIsCorrect(questionOptionRequest.isCorrect());
+                questionOptionRepository.save(questionOption);
+
+            }
+
+        }
+
+        return quiz;
     }
 
     public List<Quiz> getQuizzesByClassroom(Long classroomId) {

@@ -1,6 +1,7 @@
 package com.eduquizz.backend.dtos;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class QuizRequest {
     private String title;
@@ -8,6 +9,8 @@ public class QuizRequest {
     private LocalDateTime activeFrom;
     private LocalDateTime activeUntil;
     private Integer timeLimit;
+
+    private List<QuestionRequest> questionRequest;
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -23,4 +26,14 @@ public class QuizRequest {
 
     public Integer getTimeLimit() { return timeLimit; }
     public void setTimeLimit(Integer timeLimit) { this.timeLimit = timeLimit; }
+
+    public List<QuestionRequest> getQuestionRequest()
+    {
+        return this.questionRequest;
+    }
+
+    public void setQuestionRequest(List<QuestionRequest> questionRequest)
+    {
+        this.questionRequest = questionRequest;
+    }
 }

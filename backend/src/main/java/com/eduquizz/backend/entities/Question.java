@@ -1,6 +1,7 @@
 package com.eduquizz.backend.entities;
 
 import com.eduquizz.backend.utils.RequestType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 
@@ -16,6 +17,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
+    @JsonIgnore
     private Quiz quiz;
 
     private String text;

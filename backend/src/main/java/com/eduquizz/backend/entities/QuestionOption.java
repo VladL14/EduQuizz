@@ -1,5 +1,7 @@
 package com.eduquizz.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +12,7 @@ public class QuestionOption {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "question_id")
+    @JsonIgnore
     private Question question;
     private String text;
     private Boolean isCorrect;
@@ -32,7 +35,7 @@ public class QuestionOption {
     public void setText(String text) {
         this.text = text;
     }
-    public Boolean getIsCorrect() {
+    public Boolean isCorrect() {
         return isCorrect;
     }
     public void setIsCorrect(Boolean isCorrect) {

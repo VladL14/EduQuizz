@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import com.eduquizz.backend.entities.Quiz;
+import com.eduquizz.backend.dtos.QuestionRequest;
 import com.eduquizz.backend.dtos.QuizRequest;
 import com.eduquizz.backend.servicies.QuizService;
 
@@ -58,4 +59,6 @@ public class QuizController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+
 }

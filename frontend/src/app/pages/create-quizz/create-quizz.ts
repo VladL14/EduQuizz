@@ -78,7 +78,7 @@ export class CreateQuizzComponent implements OnInit {
 
   onSubmit() {
     if (this.quizForm.invalid) {
-      alert("Te rog completează toate câmpurile obligatorii!");
+      alert("Te rugam, completeaza toate campurile");
       return;
     }
 
@@ -107,7 +107,7 @@ export class CreateQuizzComponent implements OnInit {
       },
       error: (err) => {
         console.error("Eroare la salvare:", err);
-        const errorMsg = err.error || "A apărut o eroare la salvare (verifică consola/backend).";
+        const errorMsg = err.error || "A aparut o eroare la salvare.";
         alert("Eroare: " + errorMsg);
         this.isSubmitting = false;
       }

@@ -81,16 +81,13 @@ export class AdminDashboard implements OnInit {
 
   createClass() {
     if (!this.newClassName.trim()) {
-        alert("Te rog introdu un nume pentru clasă!");
+        alert("Te rog introdu un nume pentru clasa!");
         return;
     }
 
     this.isLoading = true;
-    console.log('Se creează clasa:', this.newClassName);
-
     this.classService.createClassroom(this.userId, this.newClassName).subscribe({
         next: (createdClass) => {
-            console.log('Clasă creată cu succes:', createdClass);
             this.isLoading = false;
             const classWithColor = {
                 ...createdClass,
@@ -101,14 +98,10 @@ export class AdminDashboard implements OnInit {
             this.cdr.detectChanges();
         },
         error: (err) => {
-            console.error('Eroare la crearea clasei:', err);
             alert("Eroare la crearea clasei: " + (err.message || 'Eroare necunoscută'));
             this.isLoading = false;
             this.closeModal();
         },
-        complete: () => {
-            console.log('Request completat');
-        }
     });
 }
 

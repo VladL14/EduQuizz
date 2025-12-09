@@ -51,7 +51,7 @@ export class StudentDashboard implements OnInit {
   }
 
   enroll() {
-    const code = prompt("Introdu codul unic al clasei (primit de la profesor):");
+    const code = prompt("Introdu codul unic al clasei:");
 
     if (code) {
       this.classService.enrollStudent(this.userId, code).subscribe({

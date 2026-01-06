@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.eduquizz.backend.utils.AttemptStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*; 
@@ -25,7 +26,9 @@ public class QuizAttempt {
     private Quiz quiz;
 
     private LocalDateTime startTime;
-    private Integer status; // 0 = in progress, 1 = completed
+
+    @Enumerated(EnumType.STRING)
+    private AttemptStatus status;
 
     private Integer grade;
     @OneToMany(mappedBy = "quizAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,11 +68,11 @@ public class QuizAttempt {
         this.startTime = startTime;
     }
 
-    public Integer getStatus() {
+    public AttemptStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(AttemptStatus status) {
         this.status = status;
     }
 
@@ -86,3 +89,4 @@ public class QuizAttempt {
     public List<StudentResponse> getResponses() { return responses; }
     public void setResponses(List<StudentResponse> responses) { this.responses = responses; }
 }
+

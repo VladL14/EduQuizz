@@ -27,6 +27,9 @@ public class Question {
 
     private Integer points;
 
+    @Column(name = "correct_text_answer")
+    private String correctTextAnswer;
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionOption> options = new ArrayList<>();
 
@@ -66,6 +69,14 @@ public class Question {
     }
     public void setPoints(Integer points) {
         this.points = points;
+    }
+
+    public String getCorrectTextAnswer() {
+        return correctTextAnswer;
+    }
+
+    public void setCorrectTextAnswer(String correctTextAnswer) {
+        this.correctTextAnswer = correctTextAnswer;
     }
 
     public List<QuestionOption> getOptions() { return options; }

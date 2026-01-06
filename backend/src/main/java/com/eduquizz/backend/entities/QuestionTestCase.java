@@ -1,5 +1,7 @@
 package com.eduquizz.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,9 +13,10 @@ public class QuestionTestCase {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
+    @JsonIgnore
     private Question question;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "stdin",columnDefinition = "TEXT")
     private String stdin;
 
     @Column(name = "expected_stdout", columnDefinition = "TEXT")
@@ -34,16 +37,16 @@ public class QuestionTestCase {
     public void setQuestion(Question question) {
         this.question = question;
     }
-    public String getStdin() {
+    public String getInput() {
         return stdin;
     }
-    public void setStdin(String stdin) {
+    public void setInput(String stdin) {
         this.stdin = stdin;
     }
-    public String getExpectedStdout() {
+    public String getExpectedOutput() {
         return expectedStdout;
     }
-    public void setExpectedStdout(String expectedStdout) {
+    public void setExpectedOutput(String expectedStdout) {
         this.expectedStdout = expectedStdout;
     }
     public Boolean getIsPublic() {

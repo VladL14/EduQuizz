@@ -131,7 +131,7 @@ public class DataSeeder implements CommandLineRunner {
             attempt.setStudent(s1);
             attempt.setQuiz(quiz);
             attempt.setStartTime(LocalDateTime.now().minusHours(2));
-            attempt.setStatus(1); // 1 = COMPLETED
+            attempt.setStatus(AttemptStatus.COMPLETED); // 1 = COMPLETED
             attempt.setGrade(10);  // NOTA 10
             quizAttemptRepository.save(attempt);
 
@@ -139,7 +139,7 @@ public class DataSeeder implements CommandLineRunner {
             attempt1.setStudent(s1);
             attempt1.setQuiz(quiz2);
             attempt1.setStartTime(LocalDateTime.now().minusHours(2));
-            attempt1.setStatus(1); // 1 = COMPLETED
+            attempt1.setStatus(AttemptStatus.COMPLETED); // 1 = COMPLETED
             attempt1.setGrade(10);  // NOTA 10
             quizAttemptRepository.save(attempt1);
 
@@ -147,7 +147,7 @@ public class DataSeeder implements CommandLineRunner {
             attempt2.setStudent(s2);
             attempt2.setQuiz(quiz);
             attempt2.setStartTime(LocalDateTime.now().minusHours(2));
-            attempt2.setStatus(1); // 1 = COMPLETED
+            attempt2.setStatus(AttemptStatus.COMPLETED); // 1 = COMPLETED
             attempt2.setGrade(10);  // NOTA 10
             quizAttemptRepository.save(attempt2);
 
@@ -156,7 +156,7 @@ public class DataSeeder implements CommandLineRunner {
             attempt3.setStudent(s2);
             attempt3.setQuiz(quiz2);
             attempt3.setStartTime(LocalDateTime.now().minusHours(2));
-            attempt3.setStatus(1); // 1 = COMPLETED
+            attempt3.setStatus(AttemptStatus.COMPLETED); // 1 = COMPLETED
             attempt3.setGrade(10);  // NOTA 10
             quizAttemptRepository.save(attempt3);
 
@@ -164,7 +164,7 @@ public class DataSeeder implements CommandLineRunner {
             attempt4.setStudent(s3);
             attempt4.setQuiz(quiz);
             attempt4.setStartTime(LocalDateTime.now().minusHours(2));
-            attempt4.setStatus(1); // 1 = COMPLETED
+            attempt4.setStatus(AttemptStatus.COMPLETED); // 1 = COMPLETED
             attempt4.setGrade(10);  // NOTA 10
             quizAttemptRepository.save(attempt4);
 
@@ -173,7 +173,7 @@ public class DataSeeder implements CommandLineRunner {
             attempt5.setStudent(s3);
             attempt5.setQuiz(quiz2);
             attempt5.setStartTime(LocalDateTime.now().minusHours(2));
-            attempt5.setStatus(1); // 1 = COMPLETED
+            attempt5.setStatus(AttemptStatus.COMPLETED); // 1 = COMPLETED
             attempt5.setGrade(10);  // NOTA 10
             quizAttemptRepository.save(attempt5);
 

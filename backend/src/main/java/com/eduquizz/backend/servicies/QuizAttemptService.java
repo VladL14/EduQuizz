@@ -13,6 +13,8 @@ import com.eduquizz.backend.repositories.QuizRepository;
 import com.eduquizz.backend.repositories.UserRepository;
 import com.eduquizz.backend.utils.RequestRole;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 @Service

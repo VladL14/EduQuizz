@@ -13,19 +13,9 @@ public class QuestionRequest {
 
     private List<QuestionOptionRequest> questionOptionRequest;
 
-
-
-    public QuestionRequest(
-        Integer points,
-        String text,
-        RequestType type,
-        List<QuestionOptionRequest> request
-    ){
-        this.points = points;
-        this.text = text;
-        this.type = type;
-        this.questionOptionRequest = request;
-    }
+    private String correctTextAnswer;
+    private List<QuestionTestCaseRequest> questionTestCaseRequest;
+    public QuestionRequest() {}
 
     public Integer getPoints() {
         return points;
@@ -42,5 +32,13 @@ public class QuestionRequest {
     public List<QuestionOptionRequest> getQuestionOptionRequest()
     {
         return this.questionOptionRequest;
+    }
+
+    public String getCorrectTextAnswer() {
+        return correctTextAnswer;
+    }
+
+    public List<QuestionTestCaseRequest> getQuestionTestCaseRequest() {
+        return questionTestCaseRequest;
     }
 }

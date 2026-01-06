@@ -7,15 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.eduquizz.backend.dtos.QuestionOptionRequest;
 import com.eduquizz.backend.dtos.QuestionRequest;
+import com.eduquizz.backend.dtos.QuestionTestCaseRequest;
 import com.eduquizz.backend.dtos.QuizRequest;
 import com.eduquizz.backend.entities.Quiz;
 import com.eduquizz.backend.entities.Classroom;
 import com.eduquizz.backend.entities.Question;
 import com.eduquizz.backend.entities.QuestionOption;
+import com.eduquizz.backend.entities.QuestionTestCase;
 import com.eduquizz.backend.repositories.ClassroomRepository;
 import com.eduquizz.backend.repositories.QuestionOptionRepository;
 import com.eduquizz.backend.repositories.QuestionRepository;
+import com.eduquizz.backend.repositories.QuestionTestCaseRepository;
 import com.eduquizz.backend.repositories.QuizRepository;
+import com.eduquizz.backend.utils.RequestType;
 
 import jakarta.transaction.Transactional;
 
@@ -29,13 +33,15 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final QuestionOptionRepository questionOptionRepository;
+    private final QuestionTestCaseRepository questionTestCaseRepository;
 
-    public QuizService(ClassroomRepository classroomRepository, QuizRepository quizRepository, QuestionRepository questionRepository, QuestionOptionRepository questionOptionRepository)
+    public QuizService(ClassroomRepository classroomRepository, QuizRepository quizRepository, QuestionRepository questionRepository, QuestionOptionRepository questionOptionRepository, QuestionTestCaseRepository questionTestCaseRepository)
     {
         this.classroomRepository = classroomRepository;
         this.quizRepository = quizRepository;
         this.questionRepository = questionRepository;
         this.questionOptionRepository = questionOptionRepository;
+        this.questionTestCaseRepository = questionTestCaseRepository;
     }
 
     @Transactional
@@ -77,16 +83,36 @@ public class QuizService {
             question.setPoints(questionRequest.getPoints());
             question.setText(questionRequest.getText());
             question.setType(questionRequest.getType());
+
+            if(questionRequest.getType() == RequestType.TEXT)
+            {
+                question.setCorrectTextAnswer(questionRequest.getCorrectTextAnswer());
+            }
+
             questionRepository.save(question);
 
-            for(QuestionOptionRequest questionOptionRequest : questionRequest.getQuestionOptionRequest())
+            if(questionRequest.getType() == RequestType.GRID && questionRequest.getQuestionOptionRequest() != null)
             {
-                QuestionOption questionOption = new QuestionOption();
-                questionOption.setQuestion(question);
-                questionOption.setText(questionOptionRequest.getText());
-                questionOption.setIsCorrect(questionOptionRequest.isCorrect());
-                questionOptionRepository.save(questionOption);
+                for(QuestionOptionRequest questionOptionRequest : questionRequest.getQuestionOptionRequest())
+                {
+                    QuestionOption questionOption = new QuestionOption();
+                    questionOption.setQuestion(question);
+                    questionOption.setText(questionOptionRequest.getText());
+                    questionOption.setIsCorrect(questionOptionRequest.isCorrect());
+                    questionOptionRepository.save(questionOption);
+                }
+            }
 
+            if(questionRequest.getType() == RequestType.CODE && questionRequest.getQuestionTestCaseRequest() != null)
+            {
+                for(QuestionTestCaseRequest questionTestCaseRequest : questionRequest.getQuestionTestCaseRequest())
+                {
+                    QuestionTestCase questionTestCase = new QuestionTestCase();
+                    questionTestCase.setQuestion(question);
+                    questionTestCase.setInput(questionTestCaseRequest.getInput());
+                    questionTestCase.setExpectedOutput(questionTestCaseRequest.getExpectedOutput());
+                    questionTestCaseRepository.save(questionTestCase);
+                }
             }
 
         }

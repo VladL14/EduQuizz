@@ -6,7 +6,7 @@
         <span class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-md border border-indigo-200">PROFESOR</span>
       </div>
       <button (click)="logout()" class="text-gray-500 hover:text-red-600 font-medium px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-2">
-        <span>Ieșire</span>
+        <span>Iesire</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12" /></svg>
       </button>
     </div>
@@ -16,7 +16,7 @@
 <div class="min-h-[calc(100vh-64px)] bg-gray-50 flex flex-col py-10">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mb-20">
     <h2 class="text-2xl text-gray-800">Salut, <span class="font-bold text-indigo-700">{{ username }}</span>! 👋</h2>
-    <p class="text-gray-500 mt-1">Gestionează clasele tale.</p>
+    <p class="text-gray-500 mt-1">Gestioneaza clasele tale</p>
   </div>
 
   <div class="w-full overflow-x-auto pb-12 pt-4 px-10 scrollbar-hide">
@@ -41,7 +41,7 @@
           </div>
 
           <button (click)="manageClass(cls.id)" class="w-full mt-4 bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-indigo-600 transition-colors shadow-lg flex justify-center items-center gap-2">
-            Gestionează
+            Gestioneaza
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
           </button>
         </div>
@@ -51,7 +51,7 @@
         <div class="w-16 h-16 rounded-full bg-white shadow-sm border border-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-indigo-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
         </div>
-        <span class="text-indigo-700 font-bold text-lg group-hover:text-indigo-900">Creează o clasă nouă</span>
+        <span class="text-indigo-700 font-bold text-lg group-hover:text-indigo-900">Creeaza o clasa noua</span>
       </div>
 
     </div>
@@ -74,10 +74,10 @@
             </div>
 
             <h3 class="text-xl font-bold text-gray-900" id="modal-title">
-                Clasă Nouă
+                Clasa Noua
             </h3>
             <p class="text-sm text-gray-500 mt-1 mb-6">
-                Introdu numele pentru a genera un spațiu nou de lucru.
+                Introdu numele pentru a genera un spatiu nou de lucru.
             </p>
 
             <div class="w-full text-left">
@@ -106,13 +106,13 @@
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
             </span>
-            {{ isLoading ? 'Se creează...' : 'Creează Clasa' }}
+            {{ isLoading ? 'Se creeaza...' : 'Creeaza Clasa' }}
         </button>
         <button 
             type="button" 
             (click)="closeModal()" 
             class="w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2.5 bg-white text-base font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm transition-colors">
-            Anulează
+            Anuleaza
         </button>
       </div>
 

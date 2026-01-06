@@ -91,7 +91,7 @@ classId: number = 0;
 
   saveQuizChanges() {
     if (!this.editFormData.title || !this.editFormData.activeFrom || !this.editFormData.activeUntil) {
-        alert("Toate câmpurile sunt obligatorii!");
+        alert("Toate campurile sunt obligatorii!");
         return;
     }
 
@@ -120,11 +120,8 @@ classId: number = 0;
   private formatDateForInput(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
-    // Compensăm offsetul local (ex: +2 ore)
-    const offset = date.getTimezoneOffset(); // în minute
-  
+    const offset = date.getTimezoneOffset();
     const localDate = new Date(date.getTime() - offset * 60000);
-  
     return localDate.toISOString().slice(0, 16);
   }
 
@@ -133,7 +130,7 @@ classId: number = 0;
   }
 
   deleteQuiz(quizId: number) {
-    if(confirm("Sigur vrei să ștergi acest test? Acțiunea este ireversibilă.")) {
+    if(confirm("Sigur vrei să stergi acest test? Actiunea este ireversibila.")) {
       this.classService.deleteQuizz(quizId).subscribe(() => {
         alert("Quiz-ul selectat a fost sters!")
         this.loadDashboard();
@@ -149,14 +146,14 @@ classId: number = 0;
   }
 
   deleteClass() {
-    const confirmation = prompt("Pentru a șterge clasa, scrie 'STERGE' în căsuța de mai jos:");
+    const confirmation = prompt("Pentru a sterge clasa, scrie 'STERGE' în casuta de mai jos:");
     if (confirmation === 'STERGE') {
       this.classService.deleteClassroom(this.classId).subscribe({
         next: () => {
-          alert("Clasa a fost ștearsă.");
+          alert("Clasa a fost stearsă.");
           this.router.navigate(['/admin']);
         },
-        error: (err) => alert("Eroare la ștergere.")
+        error: (err) => alert("Eroare la stergere.")
       });
     }
   }

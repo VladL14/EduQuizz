@@ -38,6 +38,12 @@ export class QuizService {
     return this.http.get<Quiz>(`${this.apiUrl}/${id}`);
   }
 
+  startQuiz(quizId: number, studentId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${quizId}/start`, null, {
+      params: { studentId }
+    });
+  }
+
 
   runCode(data: CompilerRequest): Observable<CompilerResponse> {
     return this.http.post<CompilerResponse>(`${this.compilerUrl}/run`, data);

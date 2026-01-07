@@ -47,6 +47,9 @@ export class StudentTakeQuizz implements OnInit {
           this.loadQuiz();
         }
       });
+    } else {
+      this.isLoading = false;
+      this.errorMessage = 'Aplicația nu rulează în browser.';
     }
   }
 
@@ -76,6 +79,13 @@ export class StudentTakeQuizz implements OnInit {
             this.textAnswers[q.id] = '';
           }
         });
+        if (this.studentId) {
+          this.quizService.startQuiz(this.quizId, this.studentId).subscribe({
+            error: () => {
+              this.errorMessage = 'Nu am putut porni tentativa pentru acest test.';
+            }
+          });
+        }
         this.isLoading = false;
       },
       error: (err) => {
@@ -114,7 +124,7 @@ export class StudentTakeQuizz implements OnInit {
             .pipe(
               map((res) => {
                 const header = `Test ${index + 1}`;
-                const verdict = res.success ? '✅ Success' : `❌ ${res.message}`;
+                const verdict = res.success ? `✅ ${res.message || 'Success'}` : `❌ ${res.message}`;
                 return `${header}\n${verdict}`;
               })
             )
@@ -128,9 +138,11 @@ export class StudentTakeQuizz implements OnInit {
       .subscribe({
         next: (results) => {
           this.consoleOutputs[questionId] = results.join('\n\n');
+          this.cdr.detectChanges();
         },
         error: () => {
           this.consoleOutputs[questionId] = "Eroare de conexiune la compilator.";
+          this.cdr.detectChanges();
         }
       });
   }

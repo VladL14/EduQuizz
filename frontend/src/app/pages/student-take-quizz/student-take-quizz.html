@@ -1,6 +1,6 @@
-<div class="min-h-screen bg-gray-50 py-8 px-4" *ngIf="quiz">
+<div class="min-h-screen bg-gray-50 py-8 px-4">
   
-  <div class="max-w-5xl mx-auto">
+  <div class="max-w-5xl mx-auto" *ngIf="quiz; else quizState">
     
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8 flex justify-between items-center sticky top-4 z-10">
       <div>
@@ -12,7 +12,7 @@
       </button>
     </div>
 
-    <div class="space-y-12">
+    <div class="space-y-12" *ngIf="quiz.questions.length > 0; else noQuestions">
       
       <div *ngFor="let q of quiz.questions; let i = index" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         
@@ -91,3 +91,16 @@
 
   </div>
 </div>
+
+<ng-template #quizState>
+  <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+    <div *ngIf="isLoading" class="text-gray-600 font-medium">Se încarcă testul...</div>
+    <div *ngIf="!isLoading && errorMessage" class="text-red-600 font-semibold">{{ errorMessage }}</div>
+  </div>
+</ng-template>
+
+<ng-template #noQuestions>
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center text-gray-600">
+    Testul nu conține întrebări sau nu a fost publicat corect.
+  </div>
+</ng-template>

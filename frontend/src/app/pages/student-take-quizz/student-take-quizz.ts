@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -6,7 +6,7 @@ import { QuizService } from '../../services/quizz';
 import { Quiz } from '../../interfaces/quizz';
 import { RequestType, Question, QuestionTestCase } from '../../interfaces/question';
 import { from } from 'rxjs';
-import { concatMap, map, toArray } from 'rxjs/operators';
+import { concatMap, finalize, map, toArray } from 'rxjs/operators';
 
 @Component({
   selector: 'app-student-take-quizz',
@@ -31,6 +31,7 @@ export class StudentTakeQuizz implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private quizService: QuizService,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -118,15 +119,17 @@ export class StudentTakeQuizz implements OnInit {
               })
             )
         ),
-        toArray()
+        toArray(),
+        finalize(() => {
+          this.isRunning[questionId] = false;
+          this.cdr.detectChanges();
+        })
       )
       .subscribe({
         next: (results) => {
-          this.isRunning[questionId] = false;
           this.consoleOutputs[questionId] = results.join('\n\n');
         },
         error: () => {
-          this.isRunning[questionId] = false;
           this.consoleOutputs[questionId] = "Eroare de conexiune la compilator.";
         }
       });

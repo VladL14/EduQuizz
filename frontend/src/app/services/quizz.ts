@@ -44,6 +44,8 @@ export class QuizService {
   }
 
   submitQuiz(quizId: number, data: SubmitQuizRequest): Observable<any> {
-    return this.http.post(`${this.attemptUrl}/submit/${quizId}`, data);
+    return this.http.post(`${this.apiUrl}/${quizId}/submit`, data.responses, {
+      params: { studentId: data.studentId }
+    });
   }
 }

@@ -3,11 +3,15 @@ package com.eduquizz.backend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import com.eduquizz.backend.entities.Quiz;
+import com.eduquizz.backend.entities.QuizAttempt;
 import com.eduquizz.backend.dtos.QuestionRequest;
 import com.eduquizz.backend.dtos.QuizRequest;
+import com.eduquizz.backend.dtos.SubmitQuizRequest;
+import com.eduquizz.backend.servicies.QuizAttemptService;
 import com.eduquizz.backend.servicies.QuizService;
 
 import java.util.List;
@@ -19,6 +23,8 @@ public class QuizController {
 
     @Autowired
     private QuizService quizService;
+    @Autowired
+    private QuizAttemptService quizAttemptService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createQuiz(@RequestBody QuizRequest Request) {
@@ -57,6 +63,29 @@ public class QuizController {
             return ResponseEntity.ok("Quiz deleted successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{quizId}/start")
+    public ResponseEntity<?> startQuiz(@PathVariable Long quizId, @RequestParam Long studentId)
+    {
+        try {
+            return ResponseEntity.ok(quizAttemptService.startQuiz(studentId, quizId));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{quizId}/submit")
+    public ResponseEntity<?> submitQuiz(@PathVariable Long quizId, @RequestParam Long studentId, @RequestBody List<SubmitQuizRequest> answers)
+    {
+        try{
+            QuizAttempt attempt = quizAttemptService.submitQuiz(studentId, quizId, answers);
+            return ResponseEntity.ok(attempt);
+        }
+        catch (RuntimeException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

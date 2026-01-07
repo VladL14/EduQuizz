@@ -1,5 +1,7 @@
 package com.eduquizz.backend.entities;
 
+import org.springframework.web.bind.annotation.Mapping;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -13,6 +15,7 @@ public class StudentResponse {
 
     @ManyToOne
     @JoinColumn(name = "attempt_id")
+    @JsonIgnore
     private QuizAttempt quizAttempt;
 
     @ManyToOne
@@ -20,9 +23,10 @@ public class StudentResponse {
     @JsonIgnore
     private Question question;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "text_answer", columnDefinition = "TEXT")
     private String textAnswer;
 
+    @Column(name = "is_correct")
     private boolean isCorrect;
 
     // Getters and Setters

@@ -36,13 +36,23 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/{classroomId}")
+    @GetMapping("/classroom/{classroomId}")
     public ResponseEntity<?> getQuizzesByClassroom(@PathVariable Long classroomId) {
         try{
             List<Quiz> quizzes = quizService.getQuizzesByClassroom(classroomId);
             return ResponseEntity.ok(quizzes);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getQuizById(@PathVariable Long id) {
+        try {
+            Quiz quiz = quizService.getQuizById(id);
+            return ResponseEntity.ok(quiz);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

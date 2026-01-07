@@ -44,6 +44,11 @@ public class QuizService {
         this.questionTestCaseRepository = questionTestCaseRepository;
     }
 
+    public Quiz getQuizById(Long id) {
+        return quizRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Quiz not found with id: " + id));
+    }
+
     @Transactional
     public Quiz createQuiz(QuizRequest request) {
         Integer timeLimit = request.getTimeLimit();

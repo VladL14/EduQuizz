@@ -23,9 +23,10 @@ export interface SubmitQuizRequest {
 export interface CompilerRequest {
   code: string;
   input: string;
+  expectedOutput: string;
 }
 
 export interface CompilerResponse {
-  output: string;
-  error: string;
+  success: boolean;
+  message: string;
 }

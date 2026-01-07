@@ -38,12 +38,20 @@ export class QuizService {
     return this.http.get<Quiz>(`${this.apiUrl}/${id}`);
   }
 
+  startQuiz(quizId: number, studentId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${quizId}/start`, null, {
+      params: { studentId }
+    });
+  }
+
 
   runCode(data: CompilerRequest): Observable<CompilerResponse> {
-    return this.http.post<CompilerResponse>(`${this.compilerUrl}/execute`, data);
+    return this.http.post<CompilerResponse>(`${this.compilerUrl}/run`, data);
   }
 
   submitQuiz(quizId: number, data: SubmitQuizRequest): Observable<any> {
-    return this.http.post(`${this.attemptUrl}/submit/${quizId}`, data);
+    return this.http.post(`${this.apiUrl}/${quizId}/submit`, data.responses, {
+      params: { studentId: data.studentId }
+    });
   }
 }

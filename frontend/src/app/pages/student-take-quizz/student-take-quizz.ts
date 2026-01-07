@@ -49,14 +49,18 @@ export class StudentTakeQuizz implements OnInit {
   loadQuiz() {
     this.quizService.getQuizById(this.quizId).subscribe({
       next: (data) => {
-        this.quiz = data;
-       this.quiz.questions.forEach((q: any) => {
-        if (q.type === RequestType.GRID) {
-          this.gridAnswers[q.id] = new Set<number>();
-        } else {
-          this.textAnswers[q.id] = '';
-        }
-      });
+        const questions = Array.isArray(data.questions) ? data.questions : [];
+        this.quiz = { ...data, questions };
+        questions.forEach((q: Question) => {
+          if (q.type === RequestType.GRID && !Array.isArray(q.options)) {
+            q.options = [];
+          }
+          if (q.type === RequestType.GRID) {
+            this.gridAnswers[q.id] = new Set<number>();
+          } else {
+            this.textAnswers[q.id] = '';
+          }
+        });
       },
       error: (err) => alert("Eroare la încărcarea testului sau testul nu mai este disponibil.")
     });

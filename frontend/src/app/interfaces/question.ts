@@ -9,9 +9,28 @@ export interface QuestionOptionRequest {
   isCorrect: boolean;
 }
 
+export interface QuestionTestCaseRequest {
+  input: string;
+  expectedOutput: string;
+}
+
 export interface QuestionRequest {
   text: string;
   points: number;
   type: RequestType;
   questionOptionRequest: QuestionOptionRequest[];
+  questionTestCaseRequest: QuestionTestCaseRequest[];
+}
+
+export interface QuestionOption {
+  id: number;
+  text: string;
+}
+
+export interface Question {
+  id: number;
+  text: string;
+  points: number;
+  type: RequestType;
+  options: QuestionOption[];
 }

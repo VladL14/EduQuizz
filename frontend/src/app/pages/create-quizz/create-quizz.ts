@@ -17,6 +17,11 @@ export class CreateQuizzComponent implements OnInit {
   classroomId: number = 0;
   isSubmitting: boolean = false;
   RequestType = RequestType;
+  questionTypes = [
+    { value: RequestType.GRID, label: 'Grila' },
+    { value: RequestType.CODE, label: 'Scriere Cod' },
+    { value: RequestType.TEXT, label: 'Raspuns Text' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -47,12 +52,17 @@ export class CreateQuizzComponent implements OnInit {
     return this.questions.at(questionIndex).get('options') as FormArray;
   }
 
+  getTestCases(questionIndex: number): FormArray {
+    return this.questions.at(questionIndex).get('testCases') as FormArray;
+  }
+
   addQuestion() {
     const questionGroup = this.fb.group({
       text: ['', Validators.required],
       points: [10, [Validators.required, Validators.min(1)]],
       type: [RequestType.GRID],
-      options: this.fb.array([])
+      options: this.fb.array([]),
+      testCases: this.fb.array([])
     });
 
     this.questions.push(questionGroup);
@@ -76,6 +86,35 @@ export class CreateQuizzComponent implements OnInit {
     this.getOptions(questionIndex).removeAt(optionIndex);
   }
 
+  addTestCase(questionIndex: number) {
+    const testCaseGroup = this.fb.group({
+      input: [''],
+      expectedOutput: ['', Validators.required]
+    });
+    this.getTestCases(questionIndex).push(testCaseGroup);
+  }
+
+  removeTestCase(questionIndex: number, testCaseIndex: number) {
+    this.getTestCases(questionIndex).removeAt(testCaseIndex);
+  }
+
+  onTypeChange(questionIndex: number) {
+    const question = this.questions.at(questionIndex);
+    const type = question.get('type')?.value;
+    const optionsArr = this.getOptions(questionIndex);
+    const testCasesArr = this.getTestCases(questionIndex);
+
+    optionsArr.clear();
+    testCasesArr.clear();
+
+    if (type === RequestType.GRID) {
+      this.addOption(questionIndex);
+      this.addOption(questionIndex);
+    } else if (type === RequestType.CODE) {
+      this.addTestCase(questionIndex);
+    }
+  }
+
   onSubmit() {
     if (this.quizForm.invalid) {
       alert("Te rugam, completeaza toate campurile");
@@ -94,10 +133,14 @@ export class CreateQuizzComponent implements OnInit {
         text: q.text,
         points: q.points,
         type: q.type,
-        questionOptionRequest: q.options.map((o: any) => ({
+        questionOptionRequest: q.type === RequestType.GRID ? q.options.map((o: any) => ({
           text: o.text,
           isCorrect: o.isCorrect
-        }))
+        })) : [],
+        questionTestCaseRequest: q.type === RequestType.CODE ? q.testCases.map((tc: any) => ({
+          input: tc.input,
+          expectedOutput: tc.expectedOutput
+        })) : []
       }))
     };
     this.quizService.createQuiz(quizData).subscribe({

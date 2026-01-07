@@ -49,9 +49,9 @@ export class QuizService {
     return this.http.post<CompilerResponse>(`${this.compilerUrl}/run`, data);
   }
 
-  submitQuiz(quizId: number, data: SubmitQuizRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${quizId}/submit`, data.responses, {
-      params: { studentId: data.studentId }
-    });
+  submitQuiz(quizId: number, responses: any[], studentId: number) {
+    // Construim URL-ul exact cum îl vrea Backend-ul Java:
+    // POST /api/quizzes/{quizId}/submit?studentId={studentId}
+    return this.http.post(`${this.apiUrl}/${quizId}/submit?studentId=${studentId}`, responses);
   }
 }

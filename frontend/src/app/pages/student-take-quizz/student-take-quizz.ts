@@ -17,6 +17,8 @@ export class StudentTakeQuizz implements OnInit {
   quizId: number = 0;
   studentId: number = 0;
   quiz: Quiz | null = null;
+  isLoading = true;
+  errorMessage = '';
   RequestType = RequestType;
   gridAnswers: { [questionId: number]: Set<number> } = {};
   textAnswers: { [questionId: number]: string } = {};
@@ -47,18 +49,34 @@ export class StudentTakeQuizz implements OnInit {
   }
 
   loadQuiz() {
+    this.isLoading = true;
+    this.errorMessage = '';
     this.quizService.getQuizById(this.quizId).subscribe({
       next: (data) => {
-        this.quiz = data;
-       this.quiz.questions.forEach((q: any) => {
-        if (q.type === RequestType.GRID) {
-          this.gridAnswers[q.id] = new Set<number>();
-        } else {
-          this.textAnswers[q.id] = '';
+        if (!data) {
+          this.quiz = null;
+          this.errorMessage = 'Nu am putut încărca testul.';
+          this.isLoading = false;
+          return;
         }
-      });
+        const questions = Array.isArray(data.questions) ? data.questions : [];
+        this.quiz = { ...data, questions };
+        questions.forEach((q: Question) => {
+          if (q.type === RequestType.GRID && !Array.isArray(q.options)) {
+            q.options = [];
+          }
+          if (q.type === RequestType.GRID) {
+            this.gridAnswers[q.id] = new Set<number>();
+          } else {
+            this.textAnswers[q.id] = '';
+          }
+        });
+        this.isLoading = false;
       },
-      error: (err) => alert("Eroare la încărcarea testului sau testul nu mai este disponibil.")
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = "Eroare la încărcarea testului sau testul nu mai este disponibil.";
+      }
     });
   }
   toggleOption(questionId: number, optionId: number, event: any) {

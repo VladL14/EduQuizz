@@ -27,10 +27,17 @@ export interface QuestionOption {
   text: string;
 }
 
+export interface QuestionTestCase {
+  id: number;
+  input: string;
+  expectedOutput: string;
+}
+
 export interface Question {
   id: number;
   text: string;
   points: number;
   type: RequestType;
   options: QuestionOption[];
+  testCases?: QuestionTestCase[];
 }

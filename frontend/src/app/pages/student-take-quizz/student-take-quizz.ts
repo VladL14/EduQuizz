@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { QuizService } from '../../services/quizz';
 import { Quiz } from '../../interfaces/quizz';
-import { RequestType, Question } from '../../interfaces/question';
+import { RequestType, Question, QuestionTestCase } from '../../interfaces/question';
+import { from } from 'rxjs';
+import { concatMap, map, toArray } from 'rxjs/operators';
 
 @Component({
   selector: 'app-student-take-quizz',
@@ -23,7 +25,6 @@ export class StudentTakeQuizz implements OnInit {
   gridAnswers: { [questionId: number]: Set<number> } = {};
   textAnswers: { [questionId: number]: string } = {};
   consoleOutputs: { [questionId: number]: string } = {};
-  customInputs: { [questionId: number]: string } = {};
   isRunning: { [questionId: number]: boolean } = {};
 
   constructor(
@@ -65,6 +66,9 @@ export class StudentTakeQuizz implements OnInit {
           if (q.type === RequestType.GRID && !Array.isArray(q.options)) {
             q.options = [];
           }
+          if (q.type === RequestType.CODE && !Array.isArray(q.testCases)) {
+            q.testCases = [];
+          }
           if (q.type === RequestType.GRID) {
             this.gridAnswers[q.id] = new Set<number>();
           } else {
@@ -89,27 +93,43 @@ export class StudentTakeQuizz implements OnInit {
   }
   runCode(questionId: number) {
     const code = this.textAnswers[questionId];
-    const input = this.customInputs[questionId] || '';
+    const question = this.quiz?.questions.find((item) => item.id === questionId);
+    const testCases = question?.testCases ?? [];
 
     if (!code) return;
+    if (testCases.length === 0) {
+      this.consoleOutputs[questionId] = "Nu există teste definite pentru această întrebare.";
+      return;
+    }
 
     this.isRunning[questionId] = true;
     this.consoleOutputs[questionId] = "Compiling & Running...";
 
-    this.quizService.runCode({ code, input }).subscribe({
-      next: (res) => {
-        this.isRunning[questionId] = false;
-        if (res.error) {
-          this.consoleOutputs[questionId] = `Eroare:\n${res.error}`;
-        } else {
-          this.consoleOutputs[questionId] = `Output:\n${res.output}`;
+    from(testCases)
+      .pipe(
+        concatMap((testCase: QuestionTestCase, index: number) =>
+          this.quizService
+            .runCode({ code, input: testCase.input, expectedOutput: testCase.expectedOutput })
+            .pipe(
+              map((res) => {
+                const header = `Test ${index + 1}`;
+                const verdict = res.success ? '✅ Success' : `❌ ${res.message}`;
+                return `${header}\n${verdict}`;
+              })
+            )
+        ),
+        toArray()
+      )
+      .subscribe({
+        next: (results) => {
+          this.isRunning[questionId] = false;
+          this.consoleOutputs[questionId] = results.join('\n\n');
+        },
+        error: () => {
+          this.isRunning[questionId] = false;
+          this.consoleOutputs[questionId] = "Eroare de conexiune la compilator.";
         }
-      },
-      error: (err) => {
-        this.isRunning[questionId] = false;
-        this.consoleOutputs[questionId] = "Eroare de conexiune la compilator.";
-      }
-    });
+      });
   }
   submitQuiz() {
     if (!confirm("Ești sigur că vrei să trimiți testul? Nu vei mai putea reveni.")) return;

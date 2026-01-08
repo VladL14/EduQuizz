@@ -27,6 +27,7 @@ import com.eduquizz.backend.repositories.ClassroomRepository;
 import com.eduquizz.backend.repositories.QuizAttemptRepository;
 import com.eduquizz.backend.repositories.QuizRepository;
 import com.eduquizz.backend.repositories.UserRepository;
+import com.eduquizz.backend.utils.AttemptStatus;
 import com.eduquizz.backend.utils.RequestRole;
 
 @Service
@@ -114,7 +115,7 @@ public class ClassroomService {
 
         List<Quiz> quizzes = quizRepository.findByClassroomId(classroomId);
         List<QuizSummaryDTO> quizDTOs = quizzes.stream()
-                .map(q -> new QuizSummaryDTO(q.getId(), q.getTitle(), q.getActiveFrom(), q.getActiveUntil(), q.getTimeLimit()))
+                .map(q -> new QuizSummaryDTO(q.getId(), q.getTitle(), q.getActiveFrom(), q.getActiveUntil(), q.getTimeLimit(), null, null))
                 .collect(Collectors.toList());
 
         List<ClassEnrollment> classEnrollments = classEnrollmentRepository.findAllByClassroomId(classroomId);
@@ -126,13 +127,23 @@ public class ClassroomService {
 
         for(User student : students)
         {
-            Map<Long, Integer> grades = new HashMap<>();
+            Map<Long, String> grades = new HashMap<>();
             
             for(QuizAttempt attempt : attempts)
             {
                 if(attempt.getStudent().getId().equals(student.getId()) && attempt.getGrade() != null)
                 {
-                    grades.put(attempt.getQuiz().getId(), attempt.getGrade());
+                    if(attempt.getStatus() == AttemptStatus.IN_PROGRESS)
+                    {
+                        grades.put(attempt.getQuiz().getId(), "IP");
+                    }
+                    else if(attempt.getStatus() == AttemptStatus.PENDING_REVIEW){
+                        grades.put(attempt.getQuiz().getId(), "P:" + attempt.getGrade());
+                    }
+                    else
+                    {
+                        grades.put(attempt.getQuiz().getId(), String.valueOf(attempt.getGrade()));
+                    }
                 }
             }
 

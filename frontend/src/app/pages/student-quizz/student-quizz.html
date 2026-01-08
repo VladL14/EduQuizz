@@ -35,11 +35,20 @@
                   {{ quiz.activeUntil | date:'dd MMM, HH:mm' }}
                 </span>
               </p>
+              
+              <p *ngIf="quiz.status === 'IN_PROGRESS'" class="text-yellow-600 font-bold text-xs uppercase flex items-center gap-1 mt-1">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                 Test început - Cronometrul rulează!
+              </p>
             </div>
           </div>
 
-          <button (click)="startQuiz(quiz.id)" class="mt-4 sm:mt-0 px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow transition-colors flex items-center gap-2">
-            INCEPE TESTUL
+          <button (click)="startQuiz(quiz.id)" 
+                  [ngClass]="quiz.status === 'IN_PROGRESS' ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-600 hover:bg-green-700'"
+                  class="mt-4 sm:mt-0 px-6 py-2 text-white font-bold rounded-lg shadow transition-colors flex items-center gap-2">
+            
+            <span *ngIf="quiz.status === 'NEW'">INCEPE TESTUL</span>
+            <span *ngIf="quiz.status === 'IN_PROGRESS'">CONTINUA TESTUL</span>
           </button>
         </div>
       </div>
@@ -76,14 +85,21 @@
             <h3 class="text-lg font-medium text-gray-700">{{ quiz.title }}</h3>
             <p class="text-xs text-gray-500">S-a închis pe: {{ quiz.activeUntil | date:'dd/MM/yyyy HH:mm' }}</p>
             
-            <p *ngIf="quiz.myGrade === undefined || quiz.myGrade === null" class="text-xs text-red-500 font-bold mt-1">Expirat (Neparticipat)</p>
+            <p *ngIf="quiz.status === 'EXPIRED'" class="text-xs text-red-500 font-bold mt-1 uppercase">
+              Absent (Termen Expirat)
+            </p>
+
+            <p *ngIf="(quiz.status === 'COMPLETED' || quiz.status === 'PENDING_REVIEW') && quiz.grade == null" class="text-xs text-blue-500 font-bold mt-1 uppercase flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+              Se corectează...
+            </p>
           </div>
 
-          <div *ngIf="quiz.myGrade !== undefined && quiz.myGrade !== null" class="text-right">
+          <div *ngIf="quiz.grade != null" class="text-right">
             <span class="block text-xs font-bold text-gray-500 uppercase">Nota</span>
             <span class="text-2xl font-extrabold"
-                  [ngClass]="quiz.myGrade >= 5 ? 'text-green-600' : 'text-red-600'">
-                {{ quiz.myGrade }}
+                  [ngClass]="quiz.grade >= 5 ? 'text-green-600' : 'text-red-600'">
+                {{ quiz.grade }}
             </span>
           </div>
 

@@ -94,6 +94,11 @@ public class QuizAttemptService {
             throw new RuntimeException("Quiz cannot be started before its active from date");
         }
 
+        if(quiz.getActiveUntil().isBefore(LocalDateTime.now()))
+        {
+            throw new RuntimeException("Quiz cannot be started after its active to date");
+        }
+
         QuizAttempt quizAttempt = new QuizAttempt();
         quizAttempt.setQuiz(quiz);
         quizAttempt.setStudent(user);
@@ -185,4 +190,47 @@ public class QuizAttemptService {
         }
         throw new RuntimeException("Quiz is already completed or it is waiting review");
     }
-}
+
+    @Transactional
+    public QuizAttempt gradeQuizAttempt(Long quizAttemptId, Long questionId, int newGrade)
+    {
+        QuizAttempt quizAttempt = quizAttemptRepository.findById(quizAttemptId)
+            .orElseThrow(() -> new RuntimeException("Quiz attempt not found with id: " + quizAttemptId));
+        
+        StudentResponse response = quizAttempt.getResponses().stream()
+            .filter(r -> r.getQuestion().getId().equals(questionId))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Response not found for question id: " + questionId));
+
+            if(newGrade > response.getQuestion().getPoints())
+            {
+                throw new RuntimeException("New grade cannot be higher than the question's maximum points");
+            }
+
+            if(response.getQuestion().getType() != RequestType.TEXT)
+            {
+                throw new RuntimeException("Only TEXT type questions can be graded manually");
+            }
+            response.setCorrect(newGrade == response.getQuestion().getPoints());
+            studentResponseRepository.save(response);
+
+            int totalScore = quizAttempt.getResponses().stream()
+                .mapToInt(r -> r.isCorrect() ? r.getQuestion().getPoints() : 0)
+                .sum();
+
+            quizAttempt.setGrade(totalScore);
+            quizAttempt.setStatus(AttemptStatus.COMPLETED);
+            return quizAttemptRepository.save(quizAttempt);
+
+        }
+
+        public QuizAttempt getAttemptById(Long id) {
+            return quizAttemptRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Quiz attempt not found with id: " + id));
+        }
+
+        public QuizAttempt getAttemptByStudentAndQuiz(Long studentId, Long quizId) {
+            return quizAttemptRepository.findByStudentIdAndQuizId(studentId, quizId)
+                    .orElseThrow(() -> new RuntimeException("Quiz attempt not found for student id: " + studentId + " and quiz id: " + quizId));
+        }
+    }

@@ -20,7 +20,6 @@ public class StudentResponse {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    @JsonIgnore
     private Question question;
 
     @Column(name = "text_answer", columnDefinition = "TEXT")

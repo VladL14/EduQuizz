@@ -3,22 +3,12 @@ package com.eduquizz.backend.servicies;
 
 
 
+import com.eduquizz.backend.dtos.*;
+import com.eduquizz.backend.entities.*;
+import com.eduquizz.backend.repositories.*;
+import com.eduquizz.backend.utils.AttemptStatus;
 import org.springframework.stereotype.Service;
 
-import com.eduquizz.backend.dtos.QuestionOptionRequest;
-import com.eduquizz.backend.dtos.QuestionRequest;
-import com.eduquizz.backend.dtos.QuestionTestCaseRequest;
-import com.eduquizz.backend.dtos.QuizRequest;
-import com.eduquizz.backend.entities.Quiz;
-import com.eduquizz.backend.entities.Classroom;
-import com.eduquizz.backend.entities.Question;
-import com.eduquizz.backend.entities.QuestionOption;
-import com.eduquizz.backend.entities.QuestionTestCase;
-import com.eduquizz.backend.repositories.ClassroomRepository;
-import com.eduquizz.backend.repositories.QuestionOptionRepository;
-import com.eduquizz.backend.repositories.QuestionRepository;
-import com.eduquizz.backend.repositories.QuestionTestCaseRepository;
-import com.eduquizz.backend.repositories.QuizRepository;
 import com.eduquizz.backend.utils.RequestType;
 
 import jakarta.transaction.Transactional;
@@ -26,6 +16,7 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuizService {
@@ -34,14 +25,16 @@ public class QuizService {
     private final QuestionRepository questionRepository;
     private final QuestionOptionRepository questionOptionRepository;
     private final QuestionTestCaseRepository questionTestCaseRepository;
+    private final QuizAttemptRepository quizAttemptRepository;
 
-    public QuizService(ClassroomRepository classroomRepository, QuizRepository quizRepository, QuestionRepository questionRepository, QuestionOptionRepository questionOptionRepository, QuestionTestCaseRepository questionTestCaseRepository)
+    public QuizService(ClassroomRepository classroomRepository, QuizRepository quizRepository, QuestionRepository questionRepository, QuestionOptionRepository questionOptionRepository, QuestionTestCaseRepository questionTestCaseRepository, QuizAttemptRepository quizAttemptRepository, StudentResponseRepository studentResponseRepository)
     {
         this.classroomRepository = classroomRepository;
         this.quizRepository = quizRepository;
         this.questionRepository = questionRepository;
         this.questionOptionRepository = questionOptionRepository;
         this.questionTestCaseRepository = questionTestCaseRepository;
+        this.quizAttemptRepository = quizAttemptRepository;
     }
 
     public Quiz getQuizById(Long id) {
@@ -177,6 +170,51 @@ public class QuizService {
         quiz.setActiveUntil(newUntil);
 
         return quizRepository.save(quiz);
+    }
+
+    public List<QuizSummaryDTO> getQuizSummariesByClassroom(Long classroomId, Long studentId) {
+        List<Quiz> quizzes = quizRepository.findByClassroomId(classroomId);
+        List<QuizSummaryDTO> quizDTOs = new ArrayList<>();
+
+        for (Quiz q : quizzes) {
+
+            Optional<QuizAttempt> attempt = quizAttemptRepository.findByStudentIdAndQuizId(studentId, q.getId());
+
+            String status = "NEW";
+            Integer grade = null;
+
+            if(attempt.isPresent())
+            {
+                status = attempt.get().getStatus().toString();
+                grade = attempt.get().getGrade();
+
+            }
+            else
+            {
+                if(q.getActiveUntil() != null && q.getActiveUntil().isBefore(LocalDateTime.now()))
+                {
+                    status = "EXPIRED";
+                }
+            }
+
+            QuizSummaryDTO dto = new QuizSummaryDTO(
+                    q.getId(),
+                    q.getTitle(),
+                    q.getActiveFrom(),
+                    q.getActiveUntil(),
+                    q.getTimeLimit(),
+                    status,
+                    grade
+            );
+            quizDTOs.add(dto);
+        }
+
+        return quizDTOs;
+    }
+
+    public QuizAttempt getAttemptByStudentAndQuiz(Long studentId, Long quizId) {
+        return quizAttemptRepository.findByStudentIdAndQuizId(studentId, quizId)
+                .orElseThrow(() -> new RuntimeException("Quiz attempt not found for student id: " + studentId + " and quiz id: " + quizId));
     }
 
 }

@@ -7,6 +7,7 @@ import { StudentQuizz } from './pages/student-quizz/student-quizz';
 import { StudentTakeQuizz } from './pages/student-take-quizz/student-take-quizz';
 import { ClassDashboard } from './pages/class-dashboard/class-dashboard';
 import { CreateQuizzComponent } from './pages/create-quizz/create-quizz';
+import { TeacherGrading } from './pages/teacher-grading/teacher-grading';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,5 +19,7 @@ export const routes: Routes = [
   { path: 'student/quiz/:id/take', component: StudentTakeQuizz},
   { path: 'teacher/class/:id', component: ClassDashboard},
   { path: 'teacher/create-quiz', component: CreateQuizzComponent },
+  { path: 'teacher/grade/:id', component: TeacherGrading},
   { path: '**', redirectTo: 'login' }
+
 ];

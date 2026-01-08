@@ -1,5 +1,6 @@
 package com.eduquizz.backend.controllers;
 
+import com.eduquizz.backend.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -8,9 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.eduquizz.backend.entities.Quiz;
 import com.eduquizz.backend.entities.QuizAttempt;
-import com.eduquizz.backend.dtos.QuestionRequest;
-import com.eduquizz.backend.dtos.QuizRequest;
-import com.eduquizz.backend.dtos.SubmitQuizRequest;
 import com.eduquizz.backend.servicies.QuizAttemptService;
 import com.eduquizz.backend.servicies.QuizService;
 
@@ -36,10 +34,10 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/classroom/{classroomId}")
-    public ResponseEntity<?> getQuizzesByClassroom(@PathVariable Long classroomId) {
+    @GetMapping("/classroom/{classroomId}/student/{studentId}")
+    public ResponseEntity<?> getQuizzesByClassroom(@PathVariable Long classroomId, @PathVariable Long studentId) {
         try{
-            List<Quiz> quizzes = quizService.getQuizzesByClassroom(classroomId);
+            List<QuizSummaryDTO> quizzes = quizService.getQuizSummariesByClassroom(classroomId, studentId);
             return ResponseEntity.ok(quizzes);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

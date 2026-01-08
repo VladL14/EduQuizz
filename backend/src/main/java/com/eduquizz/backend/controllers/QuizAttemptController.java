@@ -41,4 +41,37 @@ public class QuizAttemptController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAttemptById(@PathVariable Long id) {
+        try {
+            QuizAttempt attempt = quizAttemptService.getAttemptById(id);
+            return ResponseEntity.ok(attempt);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{attemptId}/grade/{questionId}")
+    public ResponseEntity<?> gradeQuestion(
+            @PathVariable Long attemptId,
+            @PathVariable Long questionId,
+            @RequestParam Integer points) {
+        try {
+            QuizAttempt updatedAttempt = quizAttemptService.gradeQuizAttempt(attemptId, questionId, points);
+            return ResponseEntity.ok(updatedAttempt);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/student/{studentId}/quiz/{quizId}")
+    public ResponseEntity<?> getAttemptByStudentAndQuiz(@PathVariable Long studentId, @PathVariable Long quizId) {
+        try {
+            QuizAttempt attempt = quizAttemptService.getAttemptByStudentAndQuiz(studentId, quizId);
+            return ResponseEntity.ok(attempt);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

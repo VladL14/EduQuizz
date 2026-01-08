@@ -37,6 +37,7 @@ public class Question {
     private List<QuestionTestCase> testCases = new ArrayList<>();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<StudentResponse> responses = new ArrayList<>();
 
     // Getters and Setters

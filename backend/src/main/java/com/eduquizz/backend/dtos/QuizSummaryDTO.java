@@ -2,43 +2,53 @@ package com.eduquizz.backend.dtos;
 
 import java.time.LocalDateTime;
 
+import com.eduquizz.backend.utils.AttemptStatus;
+
 public class QuizSummaryDTO {
-    private Long quizId;
-    private String name;
+    private Long id;
+    private String title;
     private LocalDateTime activeFrom;
     private LocalDateTime activeUntil;
     private Integer timeLimit;
 
-    public QuizSummaryDTO(Long quizId, String name,  LocalDateTime activeFrom, LocalDateTime activeUntil, Integer timeLimit)
+    private String status;
+    private Integer grade;
+
+    public QuizSummaryDTO(Long id, String title,  LocalDateTime activeFrom, LocalDateTime activeUntil, Integer timeLimit, String status, Integer grade)
     {
-        this.quizId = quizId;
-        this.name = name;
+        this.id = id;
+        this.title = title;
         this.activeFrom = activeFrom;
         this.activeUntil = activeUntil;
         this.timeLimit = timeLimit;
+        this.status = status;
+        this.grade = grade;
     }
 
-    public Long getQuizId()
+    public Long getId()
     {
-        return this.quizId;
+        return this.id;
     }
 
-    public void setQuizId(Long quizId)
+    public void setId(Long id)
     {
-        this.quizId = quizId;
+        this.id = id;
     }
 
-    public String getName()
+    public String getTitle()
     {
-        return this.name;
+        return this.title;
     }
 
-    public void setName(String name)
+    public void setTitle(String title)
     {
-        this.name = name;
+        this.title = title;
     }
 
     public LocalDateTime getActiveFrom() { return activeFrom; }
     public LocalDateTime getActiveUntil() { return activeUntil; }
     public Integer getTimeLimit() { return timeLimit; }
+
+    public String getStatus() { return status; }
+    public Integer getGrade() { return grade; }
 }

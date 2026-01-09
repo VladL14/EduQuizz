@@ -103,7 +103,7 @@ public class QuizAttemptService {
         quizAttempt.setQuiz(quiz);
         quizAttempt.setStudent(user);
         quizAttempt.setStartTime(LocalDateTime.now());
-        quizAttempt.setGrade(0);
+        quizAttempt.setGrade(0.0);
         quizAttempt.setStatus(AttemptStatus.IN_PROGRESS);
 
         return quizAttemptRepository.save(quizAttempt);
@@ -182,7 +182,7 @@ public class QuizAttemptService {
                 studentResponseRepository.save(response);
             }
 
-                quizAttempt.setGrade((int) totalScore);
+                quizAttempt.setGrade(totalScore);
                 quizAttempt.setStatus(needsManualGrading ? AttemptStatus.PENDING_REVIEW : AttemptStatus.COMPLETED);
 
                 return quizAttemptRepository.save(quizAttempt);
@@ -192,7 +192,7 @@ public class QuizAttemptService {
     }
 
     @Transactional
-    public QuizAttempt gradeQuizAttempt(Long quizAttemptId, Long questionId, int newGrade)
+    public QuizAttempt gradeQuizAttempt(Long quizAttemptId, Long questionId, double newGrade)
     {
         QuizAttempt quizAttempt = quizAttemptRepository.findById(quizAttemptId)
             .orElseThrow(() -> new RuntimeException("Quiz attempt not found with id: " + quizAttemptId));
@@ -212,10 +212,11 @@ public class QuizAttemptService {
                 throw new RuntimeException("Only TEXT type questions can be graded manually");
             }
             response.setCorrect(newGrade == response.getQuestion().getPoints());
+            response.setScore(newGrade);
             studentResponseRepository.save(response);
 
-            int totalScore = quizAttempt.getResponses().stream()
-                .mapToInt(r -> r.isCorrect() ? r.getQuestion().getPoints() : 0)
+            double totalScore = quizAttempt.getResponses().stream()
+                .mapToDouble(StudentResponse::getScore)
                 .sum();
 
             quizAttempt.setGrade(totalScore);

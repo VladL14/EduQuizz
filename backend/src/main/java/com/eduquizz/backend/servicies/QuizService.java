@@ -181,7 +181,7 @@ public class QuizService {
             Optional<QuizAttempt> attempt = quizAttemptRepository.findByStudentIdAndQuizId(studentId, q.getId());
 
             String status = "NEW";
-            Integer grade = null;
+            Double grade = null;
 
             if(attempt.isPresent())
             {

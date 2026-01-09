@@ -1,5 +1,5 @@
 <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-  
+
   <div class="max-w-4xl mx-auto mb-8 flex items-center justify-between">
     <button (click)="goBack()" class="flex items-center text-gray-600 hover:text-indigo-600 font-medium transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
@@ -20,12 +20,12 @@
         </span>
         Disponibile Acum
       </h2>
-      
+
       <div class="grid gap-4">
         <div *ngFor="let quiz of activeQuizzes" class="bg-white border-l-4 border-green-500 rounded-lg shadow-md p-6 flex flex-col sm:flex-row justify-between items-center transform transition-transform hover:scale-[1.01]">
           <div>
             <h3 class="text-xl font-bold text-gray-900">{{ quiz.title }}</h3>
-            
+
             <div class="mt-2 text-sm text-gray-600 space-y-1">
               <p>
                 Timp limita: <span class="font-bold text-gray-900">{{ quiz.timeLimit }} min</span>
@@ -35,7 +35,7 @@
                   {{ quiz.activeUntil | date:'dd MMM, HH:mm' }}
                 </span>
               </p>
-              
+
               <p *ngIf="quiz.status === 'IN_PROGRESS'" class="text-yellow-600 font-bold text-xs uppercase flex items-center gap-1 mt-1">
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                  Test început - Cronometrul rulează!
@@ -43,10 +43,10 @@
             </div>
           </div>
 
-          <button (click)="startQuiz(quiz.id)" 
+          <button (click)="startQuiz(quiz.id)"
                   [ngClass]="quiz.status === 'IN_PROGRESS' ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-600 hover:bg-green-700'"
                   class="mt-4 sm:mt-0 px-6 py-2 text-white font-bold rounded-lg shadow transition-colors flex items-center gap-2">
-            
+
             <span *ngIf="quiz.status === 'NEW'">INCEPE TESTUL</span>
             <span *ngIf="quiz.status === 'IN_PROGRESS'">CONTINUA TESTUL</span>
           </button>
@@ -63,7 +63,7 @@
           <div class="flex justify-between items-start">
             <div>
               <h3 class="text-lg font-semibold text-gray-800">{{ quiz.title }}</h3>
-              
+
               <p class="text-sm text-gray-500 mt-2 flex items-center gap-2">
                 Deschidere: <span class="font-medium text-gray-700">{{ quiz.activeFrom | date:'dd MMM yyyy, HH:mm' }}</span>
               </p>
@@ -84,7 +84,7 @@
           <div>
             <h3 class="text-lg font-medium text-gray-700">{{ quiz.title }}</h3>
             <p class="text-xs text-gray-500">S-a închis pe: {{ quiz.activeUntil | date:'dd/MM/yyyy HH:mm' }}</p>
-            
+
             <p *ngIf="quiz.status === 'EXPIRED'" class="text-xs text-red-500 font-bold mt-1 uppercase">
               Absent (Termen Expirat)
             </p>
@@ -106,7 +106,7 @@
         </div>
       </div>
     </div>
-    
+
     <div *ngIf="activeQuizzes.length === 0 && upcomingQuizzes.length === 0 && pastQuizzes.length === 0" class="text-center py-12">
        <p class="text-gray-400">Nu exista teste disponibile</p>
     </div>

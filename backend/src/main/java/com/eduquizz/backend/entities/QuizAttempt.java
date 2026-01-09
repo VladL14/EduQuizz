@@ -30,7 +30,7 @@ public class QuizAttempt {
     @Enumerated(EnumType.STRING)
     private AttemptStatus status;
 
-    private Integer grade;
+    private Double grade;
     @OneToMany(mappedBy = "quizAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentResponse> responses = new ArrayList<>();
 
@@ -76,12 +76,12 @@ public class QuizAttempt {
         this.status = status;
     }
 
-    public Integer getGrade()
+    public Double getGrade()
     {
         return this.grade;
     }
 
-    public void setGrade(Integer grade)
+    public void setGrade(Double grade)
     {
         this.grade = grade;
     }

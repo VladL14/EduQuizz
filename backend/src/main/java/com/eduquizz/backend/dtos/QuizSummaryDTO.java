@@ -12,9 +12,9 @@ public class QuizSummaryDTO {
     private Integer timeLimit;
 
     private String status;
-    private Integer grade;
+    private Double grade;
 
-    public QuizSummaryDTO(Long id, String title,  LocalDateTime activeFrom, LocalDateTime activeUntil, Integer timeLimit, String status, Integer grade)
+    public QuizSummaryDTO(Long id, String title,  LocalDateTime activeFrom, LocalDateTime activeUntil, Integer timeLimit, String status, Double grade)
     {
         this.id = id;
         this.title = title;
@@ -50,5 +50,5 @@ public class QuizSummaryDTO {
     public Integer getTimeLimit() { return timeLimit; }
 
     public String getStatus() { return status; }
-    public Integer getGrade() { return grade; }
+    public Double getGrade() { return grade; }
 }

@@ -1,7 +1,7 @@
   import { Component, OnInit, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
-  import { CommonModule, isPlatformBrowser } from '@angular/common';
-  import { ActivatedRoute, Router } from '@angular/router';
+  import { CommonModule, isPlatformBrowser } from '@angular/common';;
   import { QuizService } from '../../services/quizz';
+  import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
   export interface QuizSummaryDTO {
     id: number;
@@ -17,20 +17,20 @@
   @Component({
     selector: 'app-student-class-detail',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule],
     templateUrl: './student-quizz.html',
   })
   export class StudentQuizz implements OnInit {
     classId: number = 0;
     studentId: number = 0;
-    
+
     // Folosim noua interfață
     activeQuizzes: QuizSummaryDTO[] = [];
     upcomingQuizzes: QuizSummaryDTO[] = [];
     pastQuizzes: QuizSummaryDTO[] = [];
 
     constructor(
-      private route: ActivatedRoute, 
+      private route: ActivatedRoute,
       private router: Router,
       private quizService: QuizService,
       private cdr: ChangeDetectorRef,
@@ -65,7 +65,7 @@
     }
 
     categorizeQuizzes(quizzes: QuizSummaryDTO[]) {
-      const now = new Date(); 
+      const now = new Date();
 
       this.activeQuizzes = [];
       this.upcomingQuizzes = [];
@@ -73,7 +73,7 @@
 
       quizzes.forEach(quiz => {
         const fromDate = new Date(quiz.activeFrom);
-        
+
         // 1. VIITOARE: Dacă data de start e în viitor
         if (fromDate > now) {
           this.upcomingQuizzes.push(quiz);

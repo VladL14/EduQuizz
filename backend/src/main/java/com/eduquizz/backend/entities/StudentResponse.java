@@ -28,6 +28,9 @@ public class StudentResponse {
     @Column(name = "is_correct")
     private boolean isCorrect;
 
+    @Column(columnDefinition = "double default 0")
+    private double score = 0.0;
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -67,4 +70,12 @@ public class StudentResponse {
     public void setCorrect(boolean isCorrect) {
         this.isCorrect = isCorrect;
     }
+
+    public double getScore() {
+        return score;
+    }
+    public void setScore(double score) {
+        this.score = score;
+    }
+
 }

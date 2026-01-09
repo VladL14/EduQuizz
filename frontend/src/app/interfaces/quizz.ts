@@ -3,9 +3,9 @@ import { RequestType, Question } from "./question";
 export interface Quiz {
   id: number;
   title: string;
-  activeFrom: string;  
-  activeUntil: string; 
-  timeLimit: number; 
+  activeFrom: string;
+  activeUntil: string;
+  timeLimit: number;
   questions: Question[];
  }
 

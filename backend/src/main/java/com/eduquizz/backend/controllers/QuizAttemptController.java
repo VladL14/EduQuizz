@@ -56,7 +56,7 @@ public class QuizAttemptController {
     public ResponseEntity<?> gradeQuestion(
             @PathVariable Long attemptId,
             @PathVariable Long questionId,
-            @RequestParam Integer points) {
+            @RequestParam Double points) {
         try {
             QuizAttempt updatedAttempt = quizAttemptService.gradeQuizAttempt(attemptId, questionId, points);
             return ResponseEntity.ok(updatedAttempt);

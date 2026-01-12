@@ -43,4 +43,8 @@ getClassroomDashboard(classId: number, teacherId: number): Observable<ClassroomD
   deleteQuizz(quizId: number):Observable<any>{
     return this.http.delete(`${this.quizzUrl}/delete/${quizId}`, {responseType: 'text'});
   }
+
+  deleteStudentFromClassroom(studentId: number, classroomId: number): Observable<any> {
+    return this.http.delete(`${this.enrollmentUrl}/students/${studentId}/classroom/${classroomId}`, {responseType: 'text'})
+  }
 }

@@ -234,4 +234,18 @@ export class ClassDashboard {
 
     return strGrade;
   }
+
+  deleteStudentFromClass(studentId: number, classroomId: number){
+    const confirmation = prompt("Pentru a sterge studentul din clasa, scrie 'STERGE' în casuta de mai jos:");
+    if(confirmation && confirmation.toUpperCase() === "STERGE")
+    {
+      this.classService.deleteStudentFromClassroom(studentId, classroomId).subscribe({
+        next: () => {
+          alert("Studentul a fost sters din clasa.");
+          this.loadDashboard();
+        },
+        error: (err) => alert("Eroare la stergere.")
+      });
+    }
+  }
   }

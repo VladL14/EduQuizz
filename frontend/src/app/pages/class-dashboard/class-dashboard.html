@@ -103,7 +103,7 @@
                 <p class="font-bold text-gray-800 text-sm">{{ student.username }}</p>
                 <p class="text-xs text-gray-400">{{ student.email }}</p>
               </div>
-              <button class="text-xs text-red-400 hover:text-red-600 hover:underline">Elimina</button>
+              <button class="text-xs text-red-400 hover:text-red-600 hover:underline" (click)="deleteStudentFromClass(student.studentId, classId)" ck >Elimina</button>
             </div>
 
             <div class="mt-2">

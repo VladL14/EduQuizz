@@ -87,4 +87,18 @@ public class ClassEnrollmentService {
 
         return students;
     }
+
+    public void deleteStudentFromClassroom(Long studentId, Long classroomId)
+    {
+        User student = userRepository.findById(studentId).orElseThrow(() -> new RuntimeException("User not found with id: " + studentId));
+        if(student.getRole() != RequestRole.STUDENT)
+        {
+            throw new RuntimeException("Student with id: " + studentId + " is not a STUDENT");
+        }
+
+        Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(() -> new RuntimeException("Classroom not found with id: " + classroomId));
+
+        ClassEnrollment classEnrollment = classEnrollmentRepository.findByStudentAndClassroom(student, classroom).orElseThrow(() -> new RuntimeException("Classroom not found with id: " + classroomId));
+        classEnrollmentRepository.delete(classEnrollment);
+    }
 }

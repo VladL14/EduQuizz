@@ -207,9 +207,9 @@ public class QuizAttemptService {
                 throw new RuntimeException("New grade cannot be higher than the question's maximum points");
             }
 
-            if(response.getQuestion().getType() != RequestType.TEXT)
+            if(response.getQuestion().getType() == RequestType.GRID)
             {
-                throw new RuntimeException("Only TEXT type questions can be graded manually");
+                throw new RuntimeException("Only TEXT and CODE type questions can be graded manually");
             }
             response.setCorrect(newGrade == response.getQuestion().getPoints());
             response.setScore(newGrade);

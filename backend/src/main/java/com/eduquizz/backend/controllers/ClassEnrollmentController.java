@@ -65,4 +65,17 @@ public class ClassEnrollmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/students/{studentId}/classroom/{classroomId}")
+    public ResponseEntity<?> deleteStudentFromClassroom(@PathVariable Long studentId, @PathVariable Long classroomId)
+    {
+        try {
+            classEnrollmentService.deleteStudentFromClassroom(studentId, classroomId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (RuntimeException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }
